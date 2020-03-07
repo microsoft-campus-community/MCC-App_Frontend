@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCC Automate</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <header>
+        <div>
+            <img src="/pictures/icon.png">
+        </div>
+        <div id="permissions">
+            <% if(permissions.lead) { %>
+                <a href="/leads">Campus lead management</a>
+                <% } %>
+                    <% if(permissions.admin) { %>
+                        <a href="/admin">Admin management</a>
+                        <% } %>
+        </div>
+    </header>
+
+    <main>
+        <h2>Welcome,
+            <%= user["Preferred name"] %>!</h2>
+
+    </main>
+</body>
+
+</html>

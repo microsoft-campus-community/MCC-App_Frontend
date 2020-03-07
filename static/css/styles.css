@@ -1,0 +1,84 @@
+body {
+    margin: 0;
+    padding: 0;
+    --action-color: rgb(42, 21, 224);
+    --box-shadow: rgba(0, 0, 0, 0.5);
+    --box-shadow-light: rgba(0, 0, 0, 0.2);
+    --box-shadow-active: rgba(76, 4, 243, 0.2);
+}
+
+header img {
+    width: 100%;
+}
+
+main {
+    width: 80%;
+    margin-left: 10%;
+    margin-bottom: 40px;
+}
+
+main h2 {
+    text-align: center;
+}
+
+#permissions {
+    text-align: center;
+    width: 80%;
+    margin-left: 10%;
+}
+
+#permissions a {
+    display: block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    text-align: center;
+    box-shadow: 0 0 10px var(--box-shadow);
+    color: black;
+    text-decoration: none;
+}
+
+summary {
+    width: calc(100% - 40px);
+    padding: 10px 20px;
+    box-shadow: 0 0 10px var(--box-shadow);
+    margin-bottom: 20px;
+}
+
+.informations {
+    margin-top: 20px;
+}
+
+.attributeHandler {
+    margin-top: 10px;
+}
+
+.attributeHandler p {
+    margin: 0;
+}
+
+.attributeHandler input {
+    width: calc(100% - 40px);
+    margin-top: 10px;
+    background: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    box-shadow: 0 10px 10px var(--box-shadow-light);
+    transition: box-shadow 1s;
+}
+
+.attributeHandler input:focus {
+    box-shadow: 0 10px 10px var(--box-shadow-active);
+    ;
+}
+
+.actionBtn {
+    margin-top: 20px;
+    display: block;
+    padding: 10px 20px;
+    background: var(--action-color);
+    color: white;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}

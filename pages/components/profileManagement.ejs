@@ -1,0 +1,16 @@
+<div class="profile">
+    <details>
+        <summary>View your profile</summary>
+        <div class="informations">
+            <% for(attribute in user) { %>
+                <div class="attributeHandler">
+                    <p>
+                        <%= attribute %>
+                    </p>
+                    <input type="text" disabled value="<%= user[attribute] %>">
+                </div>
+                <% } %>
+                    <a class="actionBtn">Edit profile</a>
+        </div>
+    </details>
+</div>
