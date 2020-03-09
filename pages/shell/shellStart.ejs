@@ -5,29 +5,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MCC Automate</title>
-    <link rel="stylesheet" href="/css/styles.css">
+	<link rel="stylesheet" href="https://www.microsoft.com/mwf/css/bundle/latest/west-european/default/mwf-main.min.css">
+	
+	<link rel="stylesheet" href="/static/css/styles.css">
 </head>
 
 <body>
     <header>
         <div>
-            <img src="/pictures/icon.png">
+            <img src="/static/pictures/icon.png">
         </div>
-        <div id="permissions">
-            <% if(permissions.lead) { %>
-                <a href="/leads">Campus lead management</a>
-                <% } %>
-                    <% if(permissions.admin) { %>
-                        <a href="/admin">Admin management</a>
-                        <% } %>
+        <div id="nav">
+			<%- include("nav") %>
         </div>
     </header>
 
     <main>
-        <h2>Welcome,
-            <%= user["Preferred name"] %>!</h2>
-
-    </main>
-</body>
-
-</html>

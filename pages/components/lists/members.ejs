@@ -1,0 +1,23 @@
+<details>
+	<summary>
+		<div class="summaryDescription">
+			<div class="title">Campus members</div>
+			<div class="badge"><%= members.length %></div>
+		</div>
+	</summary>
+
+	<a href="#" onclick="toggleUserPopup()">Add new member</a>
+
+	<% for(let i = 0; i < members.length; i++) { %>
+	<div class="action-row">
+		<div class="btn">
+			<a href="/users/<%= members[i].id %>">View</a>
+		</div>
+		<div class="title">
+			<%= members[i].name %>
+		</div>
+	</div>
+<% } %>
+</details>
+
+<%- include("../forms/userForm") %>

@@ -1,0 +1,23 @@
+<details>
+	<summary>
+		<div class="summaryDescription">
+			<div class="title">Completed events</div>
+			<div class="badge"><%= completedEvents.length %></div>
+		</div>
+	</summary>
+
+
+	<% for(let i = 0; i < completedEvents.length; i++) { %>
+	<div class="action-row">
+		<div class="btn">
+			<a href="/events/<%= completedEvents[i].id %>">View</a>
+		</div>
+		<div class="title">
+			<%= completedEvents[i].name %>
+		</div>
+		<div class="date">
+			<%= completedEvents[i].eventDate %>
+		</div>
+	</div>
+<% } %>
+</details>

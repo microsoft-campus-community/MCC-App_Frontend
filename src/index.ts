@@ -1,31 +1,46 @@
 import express from "express";
 import path from "path";
-import dotenv from "dotenv";
+import session from "express-session";
+import bodyParser from "body-parser";
+
+import config from "./config";
+import loginApi from "./auth/authApi";
+import {userCache} from "./cache/cache";
+import { _User } from "./models/database/user";
+import apiRouter from "./api/router";
+import siteRouter from "./sites/router";
+
 
 const app = express();
-
-app.use(express.static(path.join(__dirname,"..","static")));
+app.use("/static",express.static(path.join(__dirname, "..", "static")));
 app.set("view engine", "ejs");
 
-dotenv.config();
+app.use(session({
+		secret: config.cookieSecret,
+		resave: false,
+		saveUninitialized: true
+	}));
 
-app.get("/", (req,res) => {
-	res.render(path.join(__dirname,"..","pages","shell.ejs"), {
-		permissions: {
-			lead: true,
-			admin: true
-		},
-		user: {
-			Name: "Tobias Urban",
-			Campus: "Microsoft",
-			"Preferred name": "Tobi",
-			Projects: "3",
-			Events: "6",
-			"Current position": "Member"
+app.use("/auth", loginApi);
+
+app.use(async (req, res, next) => {
+	if (req.session && req.session.session) {
+		if (await userCache.get(req.session.session)) {
+			next();
+			return;
 		}
-	});
+	}
+	res.redirect("/auth/login?origin=" + req.originalUrl);
 })
 
-app.listen(process.env.PORT || 8000, () => {
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.use("/api", apiRouter);
+
+app.use("/", siteRouter);
+
+
+app.listen(process.env.PORT || 8000, () => {
 	console.info("Server is running! (Default port:8000)");
 })

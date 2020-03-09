@@ -1,0 +1,23 @@
+<details>
+	<summary>
+		<div class="summaryDescription">
+			<div class="title">Open applications</div>
+			<div class="badge"><%= applications.length %></div>
+		</div>
+	</summary>
+
+
+	<% for(let i = 0; i < applications.length; i++) { %>
+	<div class="action-row">
+		<div class="btn">
+			<a href="/applications/<%= applications[i].id %>">View</a>
+		</div>
+		<div class="title">
+			<%= applications[i].name %>
+		</div>
+		<div class="date">
+			<%= applications[i].applicationDate %>
+		</div>
+	</div>
+<% } %>
+</details>
