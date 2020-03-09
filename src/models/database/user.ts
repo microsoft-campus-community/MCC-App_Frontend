@@ -1,5 +1,5 @@
 import { _Campus } from "./campus";
-import { Project } from "../../cache/cacheDatabases/project";
+import { _Project } from "./project";
 
 export interface _User {
 	name: string;
@@ -8,11 +8,11 @@ export interface _User {
 	projectCount: number;
 	eventCount: number;
 	position: string;
-	projects: Array<Project>;
+	projects: Array<_Project>;
 	eventIds: Array<string>;
 	id: string;
 	token: string;
-	userInformation: _AADToken;
+	userInformation?: _AADToken;
 	admin: boolean;
 	lead: boolean;
 	init():Promise<_User>;
@@ -22,6 +22,8 @@ export interface _DatabaseUser {
 	admin: boolean;
 	lead: boolean;
 	position: string;
+	name: string;
+	preferredName: string;
 }
 
 export interface _AADToken {

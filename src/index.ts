@@ -4,11 +4,11 @@ import session from "express-session";
 import bodyParser from "body-parser";
 
 import config from "./config";
-import loginApi from "./auth/authApi";
-import {userCache} from "./cache/cache";
+import loginApi from "./controller/auth/authApi";
+import {userCache} from "./controller/cache/cache";
 import { _User } from "./models/database/user";
-import apiRouter from "./api/router";
-import siteRouter from "./sites/router";
+import apiRouter from "./controller/api/router";
+import siteRouter from "./views/router";
 
 
 const app = express();

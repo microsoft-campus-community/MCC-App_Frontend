@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 
-import { userCache, campusCache } from "../cache/cache";
+import { userCache, campusCache } from "../controller/cache/cache";
 import { _User } from "../models/database/user";
 
 const siteRouter = express.Router();
@@ -148,7 +148,7 @@ siteRouter.get("/projects/:id", (req, res) => {
 	res.render(site("profiles/projectProfile"));
 })
 
-const sites = path.join(__dirname, "..", "..", "pages", "sites");
+const sites = path.join(__dirname, "..", "..", "..", "pages", "sites");
 function site(siteName: string): string {
 	return path.join(sites, siteName + ".ejs");
 }

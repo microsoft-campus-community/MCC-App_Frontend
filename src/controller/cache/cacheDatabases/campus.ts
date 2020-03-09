@@ -1,6 +1,6 @@
-import { _Campus } from "../../models/database/campus";
-import { _User } from "../../models/database/user";
-import { _Cache } from "../../models/cache/cache"; 
+import { _Campus } from "../../../models/database/campus";
+import { _User } from "../../../models/database/user";
+import { _Cache } from "../../../models/cache/cache"; 
 
 class CampusCache implements _Cache<CampusCache,_Campus> {
 	private dataMap: {[key:string]:_Campus};

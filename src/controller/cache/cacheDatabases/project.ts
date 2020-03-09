@@ -1,12 +1,13 @@
-import { _User } from "../../models/database/user";
-import { _Campus } from "../../models/database/campus";
-import { _Cache } from "../../models/cache/cache";
+import { _User } from "../../../models/database/user";
+import { _Campus } from "../../../models/database/campus";
+import { _Cache } from "../../../models/cache/cache";
 import { userCache } from "../cache";
+import { _Project } from "../../../models/database/project";
 
-class ProjectCache implements _Cache<ProjectCache,Project>, _CacheDatabase<ProjectCache> {
+class ProjectCache implements _Cache<ProjectCache,_Project>, _CacheDatabase<ProjectCache> {
 
 	//TODO Swap with interface
-	private projectMap:{[id:string]:Project};
+	private projectMap:{[id:string]:_Project};
 	
 
 	constructor() {
@@ -23,18 +24,18 @@ class ProjectCache implements _Cache<ProjectCache,Project>, _CacheDatabase<Proje
 		})
 	}
 
-	getUpcomingProjects():Promise<Array<Project>> {
+	getUpcomingProjects():Promise<Array<_Project>> {
 		return new Promise(resolve => {
 			//TODO
 			resolve([]);
 		})
 	}
-	set(item:Project):Promise<boolean> {
+	set(item:_Project):Promise<boolean> {
 		return new Promise(async resolve => {
 			this.projectMap[item.id] = await item.init();
 		})
 	}
-	get(id:string):Promise<Project | undefined> {
+	get(id:string):Promise<_Project | undefined> {
 		return new Promise(resolve => {
 			resolve(this.projectMap[id])
 		})
@@ -48,7 +49,7 @@ class ProjectCache implements _Cache<ProjectCache,Project>, _CacheDatabase<Proje
 	
 }
 
-export class Project implements _CacheDatabase<Project> {
+export class Project implements _Project,_CacheDatabase<_Project> {
 	id:string;
 	members:Array<_User>;
 	campus:Array<_Campus>;
@@ -61,7 +62,7 @@ export class Project implements _CacheDatabase<Project> {
 		this.completed = false;
 		}
 
-		async init():Promise<Project> {
+		async init():Promise<_Project> {
 			return new Promise(async resolve => {
 				if(this.members !== [] && this.campus !== []) { resolve(this); return};
 				let memberIds = await this.getMemberIds();

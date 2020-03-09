@@ -1,7 +1,7 @@
 import express from "express";
 import request from "request";
 
-import config from "../config";
+import config from "../../config";
 import {userCache} from "../cache/cache";
 import { User } from "../cache/cacheDatabases/user";
 
