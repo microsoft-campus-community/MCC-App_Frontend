@@ -1,28 +1,29 @@
-<button class="c-glyph" onclick="toggleMenu()"><img src="/static/pictures/menu.svg"</button>
-<nav>
-	<ul>
-		<li>
-			<a href="#">Admin Dashboard</a>
-		</li>
-		<li>
-			<a href="/leads">Lead Dashboard</a>
-		</li>
-		<li>
-			<a href="/">Self Service</a>
-		</li>
-	</ul>
-</nav>
+<button class="c-glyph" onclick="toggleMenu()"><img src="/pictures/menu.svg" </button>
+	<nav>
+		<ul>
+			<li>
+				<a href="#">Admin Dashboard</a>
+			</li>
+			<li>
+				<a href="/leads">Lead Dashboard</a>
+			</li>
+			<li>
+				<a href="/">Self Service</a>
+			</li>
+		</ul>
+	</nav>
 
-<script>
-	function toggleMenu() {
-	let nav = document.getElementsByTagName("nav")[0];
-	if(nav.style.height === "0px" || nav.style.height === "") {
-		nav.style.padding = "20px 0";
-		nav.style.height = "85%";
-	}
-	else {
-		nav.style.padding = "0";
-		nav.style.height = "0";
-	}
-}
-</script>
+	<script>
+		function toggleMenu() {
+			let nav = document.getElementsByTagName("nav")[0];
+			if (nav.style.height === "0px" || nav.style.height === "") {
+				nav.style.padding = "20px 0";
+				nav.style.height = "85%";
+			}
+			else {
+				nav.style.padding = "0";
+				nav.style.height = "0";
+			}
+		}
+
+	</script>

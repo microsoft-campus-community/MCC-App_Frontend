@@ -62,6 +62,10 @@ nav {
 	overflow: hidden;
 }
 
+#nav button {
+	background: white;
+}
+
 nav ul {
 	display: flex;
 	flex-direction: column;

@@ -3,18 +3,18 @@
 		<h2>Add a new member</h2>
 
 		<label class="c-label" for="default">First name</label>
-		<input id="default" class="c-text-field" type="text" name="default">
+		<input class="c-text-field" type="text" name="default">
 
 		<label class="c-label" for="default">Last name</label>
-		<input id="default" class="c-text-field" type="text" name="default">
+		<input class="c-text-field" type="text" name="default">
 
 		<label class="c-label" for="default">Alternative mail address</label>
-		<input id="default" class="c-text-field" type="text" name="default">
+		<input class="c-text-field" type="text" name="default">
 
 		<% if(permissions.admin) { %>
 		<div class="c-select">
 			<label class="c-label" for="default">Campus</label>
-			<select id="default" aria-label="Default select menu" data-selected-aria-label="Language choosen {0}">
+			<select aria-label="Default select menu" data-selected-aria-label="Language choosen {0}">
 				<% for(let i = 0; i < admin.campus.length; i++) { %>
 				<option class=""><%= admin.campus[i].name %>></option>
 				<% } %>
@@ -37,6 +37,7 @@
 
 				for (let i = 0; i < inputs.length; i++) {
 					inputs[i].disabled = false;
+					inputs[i].value = "";
 				}
 
 				let btns = document.getElementById("userPopup").getElementsByClassName("actionButtons")[0].children;

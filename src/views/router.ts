@@ -6,19 +6,25 @@ import { _User } from "../models/database/user";
 
 const siteRouter = express.Router();
 
-siteRouter.get("/", (req, res) => {
+siteRouter.get("/", async (req, res) => {
+	let user: _User | undefined = req.session ? await userCache.get(req.session.session) : undefined;
+	if (!user) {
+		res.status(403).send();
+		return;
+	}
+
 	res.render(site("dashboards/userDashboard"), {
 		permissions: {
-			lead: true,
-			admin: true
+			"lead": user.lead,
+			"admin": user.admin
 		},
 		user: {
-			Name: "Tobias Urban",
-			Campus: "Microsoft",
-			"Preferred name": "Tobi",
-			Projects: "3",
-			Events: "6",
-			"Current position": "Member"
+			"Name": user.name,
+			"Campus": user.campus.name,
+			"Preferred name": user.preferredName,
+			"Projects": user.projectCount,
+			"Events": user.eventCount,
+			"Current position": user.position
 		}
 	});
 })
@@ -34,15 +40,16 @@ siteRouter.get("/leads", async (req, res) => {
 		res.status(403).send("Lead has no campus attached or campus does not exist!");
 		return;
 	}
-	let campusMembers:Array<_User> = [];
-	campus.memberIds.forEach(async id => {
-		let user = await userCache.get(id);
-		if(!user) {
-			res.status(403).send("At least one user listed for the campus does not exist!");
-			return;
-		}
-		campusMembers.push();
-	})
+	let campusMembers: Array<_User> = [user];
+	//TODO This should belong to a caching class
+	// campus.memberIds.forEach(async id => {
+	// 	let user = await userCache.get(id);
+	// 	if(!user) {
+	// 		res.status(403).send("At least one user listed for the campus does not exist!");
+	// 		return;
+	// 	}
+	// 	campusMembers.push();
+	// })
 	res.render(site("dashboards/leadDashboard"), {
 		admin: {
 			campus: campusCache.getCampusNames()
@@ -94,23 +101,28 @@ siteRouter.get("/leads", async (req, res) => {
 })
 
 
-siteRouter.get("/users/:id", (req, res) => {
-	let user = req.params.id;
+siteRouter.get("/users/:id", async (req, res) => {
+	let userId = req.params.id;
+	let user: _User | undefined = req.session ? await userCache.get(userId) : undefined;
+	if (!user) {
+		res.status(403).send();
+		return;
+	}
 	res.render(site("profiles/userProfile"), {
 		admin: {
 			campus: [{ name: "Munich" }, { name: "Stuttgart" }, { name: "Hamburg" }, { name: "Köln" }, { name: "Frankfurt" }]
 		},
 		permissions: {
-			lead: true,
-			admin: false
+			"lead": user.lead,
+			"admin": user.admin
 		},
 		user: {
-			Name: "Tobias Urban",
-			campus: "Microsoft",
-			"Preferred name": "Tobi",
-			Projects: "3",
-			Events: "6",
-			"Current position": "Member"
+			"Name": user.name,
+			"Campus": user.campus.name,
+			"Preferred name": user.preferredName,
+			"Projects": user.projectCount,
+			"Events": user.eventCount,
+			"Current position": user.position
 		},
 		joinedDate: "24.01.2020",
 		name: "Example User",
@@ -129,10 +141,11 @@ siteRouter.get("/users/:id", (req, res) => {
 			eventDate: "18.03.2019",
 			id: "123-342-gds42"
 		}],
-		plannedProjects: [{
-			title: "World-saving ultra awesome app that is as great as the name is long"
-		}, { title: "Tinder for cats" },
-		{ title: "MCC internal app" }],
+		plannedProjects: [
+			{ title: "World-saving ultra awesome app that is as great as the name is long" },
+			{ title: "Tinder for cats" },
+			{ title: "MCC internal app" }
+		],
 		completedProjects: [],
 		projectCount: 3,
 		eventCount: 4,
@@ -148,7 +161,11 @@ siteRouter.get("/projects/:id", (req, res) => {
 	res.render(site("profiles/projectProfile"));
 })
 
-const sites = path.join(__dirname, "..", "..", "..", "pages", "sites");
+siteRouter.get("/offline", (req,res) => {
+	res.render(site("dashboards/offlineDashboard"));
+})
+
+const sites = path.join(__dirname, "..", "..", "pages", "sites");
 function site(siteName: string): string {
 	return path.join(sites, siteName + ".ejs");
 }

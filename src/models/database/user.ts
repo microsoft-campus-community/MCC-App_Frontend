@@ -5,16 +5,17 @@ export interface _User {
 	name: string;
 	campus: _Campus;
 	preferredName: string;
-	projectCount: number;
-	eventCount: number;
 	position: string;
-	projects: Array<_Project>;
-	eventIds: Array<string>;
 	id: string;
 	token: string;
 	userInformation?: _AADToken;
+
 	admin: boolean;
 	lead: boolean;
+	projects: Array<_Project>;
+	eventIds: Array<string>;
+	projectCount: number;
+	eventCount: number;
 	init():Promise<_User>;
 }
 

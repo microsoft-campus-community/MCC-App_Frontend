@@ -12,7 +12,7 @@ import siteRouter from "./views/router";
 
 
 const app = express();
-app.use("/static",express.static(path.join(__dirname, "..", "static")));
+app.use(express.static(path.join(__dirname, "..", "static")));
 app.set("view engine", "ejs");
 
 app.use(session({

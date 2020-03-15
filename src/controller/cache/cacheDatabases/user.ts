@@ -18,9 +18,9 @@ class UserCache implements _Cache<UserCache, _User>, _CacheDatabase<UserCache> {
 		return new Promise(async resolve => {
 			if (item.id != "") {
 				this.dataMap[item.id] = await item.init();
-				return true;
+				resolve(true);
 			}
-			return false;
+			 resolve(false);
 		})
 
 	}
@@ -90,30 +90,34 @@ export class User implements _User {
 			let queries: Array<Promise<any>> = [
 				getCampusId(this.id),
 				getUserProfile(this.id),
-				getProjectIds(this.id),
-				getEventIds(this.id)
+				//getProjectIds(this.id),
+				//getEventIds(this.id)
 			];
 			let responses = await Promise.all(queries);
 
 			let campus = await campusCache.get(responses[0]);
-			if (!campus) { console.error(`Campus ${responses[0]} not found when initializing user!`); return };
-			this.campus = campus;
+			if (!campus) {
+				 console.error(`Campus ${responses[0]} not found when initializing user!`); 
+				 //TODO Only for mockup purposes!
+				 //return; 
+				};
+			this.campus = campus || {} as any;
 			this.admin = responses[1].admin;
 			this.lead = responses[1].lead;
 			this.position = responses[1].position;
 			this.name = responses[1].name;
 			this.preferredName = responses[1].preferredName;
-			this.projectCount = responses[2].length;
-			this.eventCount = responses[3].length;
+			// this.projectCount = responses[2].length;
+			// this.eventCount = responses[3].length;
 
-			let projectIds: Array<string> = responses[3];
-			projectIds.forEach(async id => {
-				let project = await projectCache.get(id);
-				if (!project) { console.error(`Project ${id} not found when initializing user!`); return };
-				this.projects.push(project);
-			})
-			//TODO load all events
-			this.eventIds = responses[4];
+			// let projectIds: Array<string> = responses[3];
+			// projectIds.forEach(async id => {
+			// 	let project = await projectCache.get(id);
+			// 	if (!project) { console.error(`Project ${id} not found when initializing user!`); return };
+			// 	this.projects.push(project);
+			// })
+			// //TODO load all events
+			// this.eventIds = responses[4];
 			resolve(this);
 
 		})
