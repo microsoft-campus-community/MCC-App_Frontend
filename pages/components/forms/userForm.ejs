@@ -2,14 +2,17 @@
 	<div class="content">
 		<h2>Add a new member</h2>
 
-		<label class="c-label" for="default">First name</label>
-		<input class="c-text-field" type="text" name="default">
+		<div class="inputs">
+			<label class="c-label" for="default">First name</label>
+			<input class="c-text-field" type="text" name="default">
 
-		<label class="c-label" for="default">Last name</label>
-		<input class="c-text-field" type="text" name="default">
+			<label class="c-label" for="default">Last name</label>
+			<input class="c-text-field" type="text" name="default">
 
-		<label class="c-label" for="default">Alternative mail address</label>
-		<input class="c-text-field" type="text" name="default">
+			<label class="c-label" for="default">Alternative mail address</label>
+			<input class="c-text-field" type="text" name="default">
+		</div>
+
 
 		<% if(permissions.admin) { %>
 		<div class="c-select">
@@ -62,7 +65,7 @@
 			const lastName = inputs[1].value;
 			const mail = inputs[2].value;
 
-			fetch("/api/users",{
+			fetch("/api/users", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json"
@@ -70,10 +73,10 @@
 				body: JSON.stringify({
 					first: firstName,
 					last: lastName,
-					mail:mail
+					mail: mail
 				})
 			}).then(response => {
-				if(response.status != 201) console.error("Uh oh!");
+				if (response.status != 201) console.error("Uh oh!");
 				else resetUi();
 			})
 		}

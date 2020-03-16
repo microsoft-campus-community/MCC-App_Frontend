@@ -13,7 +13,10 @@ siteRouter.get("/", async (req, res) => {
 		return;
 	}
 
-	res.render(site("dashboards/userDashboard"), {
+	res.render(site("profiles/userProfile"), {
+		admin: {
+			campus: [{ name: "Munich" }, { name: "Stuttgart" }, { name: "Hamburg" }, { name: "Köln" }, { name: "Frankfurt" }]
+		},
 		permissions: {
 			"lead": user.lead,
 			"admin": user.admin
@@ -25,8 +28,33 @@ siteRouter.get("/", async (req, res) => {
 			"Projects": user.projectCount,
 			"Events": user.eventCount,
 			"Current position": user.position
-		}
-	});
+		},
+		joinedDate: "24.01.2020",
+		name: user.name,
+		campus: user.campus.name,
+		plannedEvents: [{
+			name: "Awesome hack",
+			eventDate: "18.03.2020",
+			id: "123-342-gds42"
+		}],
+		completedEvents: [{
+			name: "Retro hack",
+			eventDate: "18.01.2020",
+			id: "123-342-gds42"
+		}, {
+			name: "AI Workshop",
+			eventDate: "18.03.2019",
+			id: "123-342-gds42"
+		}],
+		plannedProjects: [
+			{ title: "World-saving ultra awesome app that is as great as the name is long" },
+			{ title: "Tinder for cats" },
+			{ title: "MCC internal app" }
+		],
+		completedProjects: [],
+		projectCount: 3,
+		eventCount: 4,
+	})
 })
 siteRouter.get("/leads", async (req, res) => {
 	let user: _User | undefined = req.session ? await userCache.get(req.session.session) : undefined;

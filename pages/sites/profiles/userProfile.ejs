@@ -2,26 +2,29 @@
 
 
 <h2 class="userName"><%= name %></h2>
-<div class="factBox">
-	<p class="fact"><%= joinedDate %></p>
-	<span class="label">joined community</span>
+
+
+<div class="factRow">
+	<div class="factBox">
+		<p class="fact"><%= joinedDate %></p>
+		<span class="label">joined community</span>
+	</div>
+	<div class="enforce-one-line">
+		<div class="factBox">
+			<span class="fact"><%= projectCount %></span>
+			<span class="label">projects</span>
+		</div>
+		<div class="factBox">
+			<span class="fact"><%= eventCount %></span>
+			<span class="label">events</span>
+		</div>
+	</div>
+	<div class="factBox campus">
+		<p class="fact"><%= campus %></p>
+		<span class="label">active campus</span>
+	</div>
 </div>
 
-<div class="twoFacts">
-	<div class="factBox">
-		<span class="fact"><%= projectCount %></span>
-		<span class="label">projects</span>
-	</div>
-	<div class="factBox">
-		<span class="fact"><%= eventCount %></span>
-		<span class="label">events</span>
-	</div>
-</div>
-
-<div class="factBox">
-	<p class="fact"><%= campus %></p>
-	<span class="label">active campus</span>
-</div>
 
 <%- include("../../components/lists/plannedEvents") %>
 <%- include("../../components/lists/completedEvents") %>

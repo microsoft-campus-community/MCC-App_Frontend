@@ -8,7 +8,8 @@ const config = {
 	baseUrl: process.env.BASE_URL || "",
 	redirectUrl: process.env.REDIRECT_URL || "",
 	scope: process.env.SCOPE || "",
-	cookieSecret: process.env.COOKIESECRET || ""
+	cookieSecret: process.env.COOKIESECRET || "",
+	systemUser: process.env.SYSTEMUSERID || ""
 }
 
 export default config;

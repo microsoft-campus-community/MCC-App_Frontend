@@ -1,0 +1,110 @@
+<div id="ideaPopup" class="popup">
+	<div class="content">
+		<h2>How can we improve our app?</h2>
+
+		<div class="inputs">
+			<label class="c-label" for="default">Summary</label>
+			<input class="c-text-field" type="text" name="default">
+
+			<label class="c-label" for="default">Description</label>
+			<input class="c-text-field" type="text" name="default">
+
+			<label class="c-label" for="ideaToggle">Can we come back to you? (A mail will be sent to the dev team in your name)</label>
+			<div class="c-toggle">
+				<button onclick="toggleSwitch(this)" id="ideaToggle" name="ideaToggle" role="checkbox" aria-checked="false" aria-labelledby="c-label-1 c-state-label-1"></button>
+			</div>
+		</div>
+
+		<div class="actionButtons">
+			<button class="c-button f-primary" onclick="submitIdea()">Submit your idea</button>
+			<button class="c-button" onclick="toggleIdeaPopup()">Cancel</button>
+		</div>
+	</div>
+
+	<script>
+		function toggleIdeaPopup() {
+			let popup = document.getElementById("ideaPopup");
+			if (popup.style.display === "none" || popup.style.display === "") popup.style.display = "block";
+			else {
+				let inputs = document.getElementById("ideaPopup").getElementsByTagName("input");
+
+				for (let i = 0; i < inputs.length; i++) {
+					inputs[i].disabled = false;
+					inputs[i].value = "";
+				}
+
+				let btns = document.getElementById("ideaPopup").getElementsByClassName("actionButtons")[0].children;
+				let createBtn = btns[0];
+				let cancelBtn = btns[1];
+
+				createBtn.disabled = false;
+				cancelBtn.disabled = false;
+
+				createBtn.innerHTML = "Submit your idea";
+				cancelBtn.innerHTML = "Cancel";
+
+				popup.style.display = "none";
+			}
+
+		}
+		function toggleSwitch(el) {
+			el.getAttribute("aria-checked") === "false" ? 
+			el.setAttribute("aria-checked", "true") : 
+			el.setAttribute("aria-checked", "false")
+		}
+		function submitIdea() {
+			loadIdeaUi();
+			let inputs = document.getElementById("ideaPopup").getElementsByTagName("input");
+			const summary = inputs[0].value;
+			const details = inputs[1].value;
+			const personal = document.getElementById("ideaToggle").getAttribute("aria-checked");
+
+			fetch("/api/idea", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+					summary: summary,
+					details: details,
+					personal: personal
+				})
+			}).then(response => {
+				if (response.status == 500) console.error("Uh oh!");
+				else resetIdeaUi();
+			})
+		}
+		function loadIdeaUi() {
+			let inputs = document.getElementById("ideaPopup").getElementsByTagName("input");
+			document.getElementById("ideaToggle").disabled = true;
+			for (let i = 0; i < inputs.length; i++) {
+				inputs[i].disabled = true;
+			}
+
+			let btns = document.getElementById("ideaPopup").getElementsByClassName("actionButtons")[0].children;
+			let createBtn = btns[0];
+			let cancelBtn = btns[1];
+
+			createBtn.disabled = true;
+			cancelBtn.disabled = true;
+			createBtn.innerHTML = `
+			<div class="c-progress f-indeterminate-regional" role="progressbar" aria-valuetext="Loading..." tabindex="0" aria-label="indeterminate regional progress bar">
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+			`;
+		}
+		function resetIdeaUi() {
+			let btns = document.getElementById("ideaPopup").getElementsByClassName("actionButtons")[0].children;
+			let createBtn = btns[0];
+			let cancelBtn = btns[1];
+			createBtn.innerHTML = "Done!";
+			cancelBtn.innerHTML = "Close";
+			cancelBtn.disabled = false;
+			document.getElementById("ideaToggle").disabled = false;
+		}
+	</script>
+</div>

@@ -1,37 +1,44 @@
 body {
 	margin: 0;
 	padding: 0;
-	--mcc-blue: rgb(14,120,212);
+	--mcc-blue: rgb(14, 120, 212);
 	--box-shadow: rgba(0, 0, 0, 0.5);
 	--box-shadow-light: rgba(0, 0, 0, 0.2);
 	--box-shadow-active: rgba(76, 4, 243, 0.2);
 }
 
 /** Shell styles */
+
 header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	height: 15vh;
 }
+
 header img {
 	max-height: 15vh;
 }
+
 #permissions button {
 	width: 50px;
 }
+
 main {
 	width: 80%;
 	margin-left: 10%;
 	margin-bottom: 40px;
 }
+
 main h2 {
 	text-align: center;
 }
+
 #nav {
 	text-align: right;
 	margin-right: 5%;
 }
+
 #nav a {
 	display: block;
 	padding: 10px 20px;
@@ -41,10 +48,12 @@ main h2 {
 	color: black;
 	text-decoration: none;
 }
+
 #nav button {
 	width: 50px;
 	border: 0;
 }
+
 .userName {
 	font-weight: bold;
 	color: var(--mcc-blue);
@@ -79,6 +88,7 @@ nav li {
 }
 
 /** Popup component */
+
 .popup {
 	display: none;
 	position: absolute;
@@ -89,7 +99,9 @@ nav li {
 	background: white;
 	z-index: 100;
 }
+
 .popup .content {
+	text-align: left;
 	padding: 20px;
 	margin-top: 10vh;
 	height: 80%;
@@ -98,19 +110,27 @@ nav li {
 	border-radius: 5px;
 	box-shadow: 0 0 10px var(--box-shadow);
 }
-.popup .content button {
+
+.popup .content .actionButtons button {
 	margin-top: 20px;
 	width: 100%;
 }
 
+.popup .content .c-toggle button {
+	margin-top: 10px;
+}
+
 /** Input component */
+
 .input {
 	padding: 0 5%;
 }
-.input .inputBox p{
+
+.input .inputBox p {
 	margin: 0;
 	font-size: .8em;
 }
+
 .input .inputBox input {
 	margin-top: 10px;
 	width: 100%;
@@ -119,26 +139,30 @@ nav li {
 	border-bottom: 1px solid lightgrey;
 	background: none;
 }
+
 .input .btn {
 	margin-top: 30px;
-    width: 60%;
-    margin-left: calc(20% - 10px);
-    text-align: center;
-    padding: 10px;
-    background: var(--mcc-blue);
-    color: white;
+	width: 60%;
+	margin-left: calc(20% - 10px);
+	text-align: center;
+	padding: 10px;
+	background: var(--mcc-blue);
+	color: white;
 }
+
 .input .btn:hover {
 	cursor: pointer;
 }
 
 /** Other styles */
+
 summary {
 	width: calc(100% - 40px);
 	padding: 10px 20px;
 	box-shadow: 0 0 10px var(--box-shadow);
 	margin: 20px 0;
 }
+
 details a {
 	width: 60%;
 	display: block;
@@ -149,15 +173,19 @@ details a {
 	margin-bottom: 20px;
 	text-align: center;
 }
+
 .informations {
 	margin-top: 20px;
 }
+
 .attributeHandler {
 	margin-top: 10px;
 }
+
 .attributeHandler p {
 	margin: 0;
 }
+
 .attributeHandler input {
 	width: calc(100% - 40px);
 	margin-top: 10px;
@@ -168,10 +196,12 @@ details a {
 	box-shadow: 0 10px 10px var(--box-shadow-light);
 	transition: box-shadow 1s;
 }
+
 .attributeHandler input:focus {
 	box-shadow: 0 10px 10px var(--box-shadow-active);
 	;
 }
+
 .actionBtn {
 	margin-top: 20px;
 	display: block;
@@ -183,18 +213,20 @@ details a {
 	margin-right: auto;
 }
 
-
 .summaryDescription {
 	display: inline-flex;
-	width:  90%;
+	width: 90%;
 	align-items: center;
 }
+
 .summaryDescription div {
 	display: inline-block;
 }
+
 .summaryDescription .title {
 	flex: 1;
 }
+
 .summaryDescription .badge {
 	padding: 5px 10px;
 	border-radius: 5px;
@@ -207,12 +239,14 @@ details a {
 	justify-content: space-between;
 	align-items: center;
 }
+
 .action-row .title {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	margin: 0 5px;
 }
+
 .action-row a {
 	width: auto;
 	display: block;
@@ -226,15 +260,73 @@ details a {
 .factBox {
 	margin-top: 20px;
 }
+
 .factBox .fact {
 	font-weight: bold;
 	font-size: 1.2em;
 	display: block;
 }
+
 .factBox .label {
 	font-size: .8em;
 }
-.twoFacts {
+
+.factRow, .enforce-one-line {
 	display: flex;
-	justify-content: space-evenly;
+	justify-content: space-between;
+	flex-direction: column;
+}
+
+.factRow {
+	margin: 20px 0px 40px;
+}
+
+.enforce-one-line {
+	flex-direction: row;
+	justify-content: space-around;
+}
+
+.enforce-one-line .factBox {
+	text-align: center;
+}
+
+.actionButtons {
+	margin-top: 20px;
+}
+
+.actionButtons button {
+	width: 80%;
+	margin-left: 10%;
+}
+
+.inputs input {
+	width: 90% !important;
+}
+
+@media only screen and (min-width: 1000px) {
+	#nav button {
+		display: none;
+	}
+	#nav nav {
+		display: block;
+		height: 100%;
+		top: 0;
+		left: 80%;
+		width: 20%;
+		box-shadow: -10px 0 5px 0 var(--box-shadow-light);
+	}
+	main {
+		width: 70%;
+		margin-left: 5%;
+	}
+	.factRow {
+		flex-direction: row;
+	}
+	.enforce-one-line {
+		width: 40%;
+	}
+	.actionButtons {
+		display: grid;
+		grid-template-columns: 50% 50%;
+	}
 }
