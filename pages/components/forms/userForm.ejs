@@ -59,29 +59,58 @@
 		}
 
 		function createUser() {
-			loadUi();
+			resetLabels();
 			let inputs = document.getElementById("userPopup").getElementsByTagName("input");
 			const firstName = inputs[0].value;
 			const lastName = inputs[1].value;
 			const mail = inputs[2].value;
 
-			fetch("/api/users", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify({
-					first: firstName,
-					last: lastName,
-					mail: mail
+			let labels = document.getElementById("userPopup").getElementsByTagName("label");
+			if (firstName === "") {
+				labels[0].innerText = "First name (missing)";
+				labels[0].style.color = "red";
+			}
+			if (lastName === "") {
+				labels[1].innerText = "Last name (missing)";
+				labels[1].style.color = "red";
+			}
+			if (mail === "") {
+				labels[2].innerText = " Alternative mail address (missing)";
+				labels[2].style.color = "red";
+			}
+
+			if (firstName && lastName && mail) {
+				loadUi();
+				fetch("/api/users", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						first: firstName,
+						last: lastName,
+						mail: mail
+					})
+				}).then(response => {
+					if (response.status != 201) console.error("Uh oh!");
+					else resetUi();
 				})
-			}).then(response => {
-				if (response.status != 201) console.error("Uh oh!");
-				else resetUi();
-			})
+			}
 		}
 
+
+		function resetLabels() {
+			let labels = document.getElementById("userPopup").getElementsByTagName("label");
+			labels[0].innerText = "First name";
+			labels[0].style.color = "black";
+			labels[1].innerText = "Last name";
+			labels[1].style.color = "black";
+			labels[2].innerText = "Alternative mail address";
+			labels[2].style.color = "black";
+		} 
 		function loadUi() {
+			resetLabels();
+
 			let inputs = document.getElementById("userPopup").getElementsByTagName("input");
 
 			for (let i = 0; i < inputs.length; i++) {

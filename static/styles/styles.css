@@ -37,6 +37,7 @@ main h2 {
 #nav {
 	text-align: right;
 	margin-right: 5%;
+	z-index: 1;
 }
 
 #nav a {
@@ -47,6 +48,13 @@ main h2 {
 	box-shadow: 0 0 10px var(--box-shadow);
 	color: black;
 	text-decoration: none;
+}
+
+#nav a.disabled {
+	color: gray;
+}
+#nav a.disabled:hover {
+	cursor: default;
 }
 
 #nav button {
