@@ -1,8 +1,8 @@
 ---
-name: documentation-request
+name: Documentation Request
 about: Request more information in the documentation
-title: ''
-labels: ''
+title: '[Documentation] '
+labels: 'documentation'
 assignees: ''
 
 ---
