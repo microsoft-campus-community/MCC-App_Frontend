@@ -2,3 +2,4 @@ dest
 node_modules
 projectManagement
 .env
+.DS_Store
