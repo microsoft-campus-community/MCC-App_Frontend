@@ -23,7 +23,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Transpile
+    - name: Install packages
+      run: npm install
+    - name: Transpile code
       run: tsc
     - name: Test
       run: npm test
