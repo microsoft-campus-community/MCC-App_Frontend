@@ -1,16 +1,18 @@
 import { _DatabaseUser, _User } from "../../models/database/user";
 import { userCache } from "../cache/cache";
 import { User } from "../cache/cacheDatabases/user";
+import { PeopleEngine } from "./engineRequests";
 
 
-export async function getUserProfile(userId:string): Promise<_DatabaseUser> {
-	return new Promise(resolve => {
+export async function getUserProfile(token:string): Promise<_DatabaseUser> {
+	return new Promise(async resolve => {
+        const user = await PeopleEngine.getCurrentUser(token);
 		//TODO Request to database
 		resolve({
 			admin: false,
 			lead: true,
-			position: "Campus Lead",
-			name: "Tobias Urban",
+			position: user.jobTitle,
+			name: user.displayName,
 			preferredName: "Tobi"
 		})
 	})
@@ -31,7 +33,7 @@ export async function getEventIds(userId:string): Promise<Array<string>> {
 }
 
 
-export async function getCampusId(userId:string): Promise<string> {
+export async function getCampusId(token:string): Promise<string> {
 	return new Promise(resolve => {
 		let campusId = "";
 		resolve(campusId);

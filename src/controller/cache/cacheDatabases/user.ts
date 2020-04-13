@@ -88,8 +88,8 @@ export class User implements _User {
 	async init(): Promise<_User> {
 		return new Promise(async resolve => {
 			let queries: Array<Promise<any>> = [
-				getCampusId(this.id),
-				getUserProfile(this.id),
+				getCampusId(this.token),
+				getUserProfile(this.token),
 				//getProjectIds(this.id),
 				//getEventIds(this.id)
 			];
@@ -97,9 +97,9 @@ export class User implements _User {
 
 			let campus = await campusCache.get(responses[0]);
 			if (!campus) {
-				 console.error(`Campus ${responses[0]} not found when initializing user!`); 
+				 console.error(`Campus ${responses[0]} not found when initializing user!`);
 				 //TODO Only for mockup purposes!
-				 //return; 
+				 //return;
 				};
 			this.campus = campus || {} as any;
 			this.admin = responses[1].admin;
