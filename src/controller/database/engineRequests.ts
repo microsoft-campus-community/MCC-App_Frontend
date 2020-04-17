@@ -17,7 +17,7 @@ export abstract class PeopleEngine {
         })
     }
     static async getCurrentUser(token:string):Promise<_PeopleEngineUser> {
-        return this.requestEngineItem("users/current",token);
+        return this.requestEngineItem("users/current?scope=full",token);
     }
     static async getCurrentUserCampus(token:string):Promise<_PeopleEngineCampus> {
         return this.requestEngineItem("hubs/campus/my",token);

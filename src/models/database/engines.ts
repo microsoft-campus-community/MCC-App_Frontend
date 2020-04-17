@@ -1,6 +1,10 @@
 export interface _PeopleEngineUser {
+    isCampusLead: boolean;
+    isHubLead: boolean;
+    isAdmin: boolean;
     accountEnabled: boolean;
     city: string;
+    hireDate: string;
     university: string;
     displayName: string;
     id: string;

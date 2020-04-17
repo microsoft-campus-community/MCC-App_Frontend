@@ -9,11 +9,11 @@ export async function getUserProfile(token:string): Promise<_DatabaseUser> {
         const user = await PeopleEngine.getCurrentUser(token);
 		//TODO Request to database
 		resolve({
-			admin: false,
-			lead: true,
+			admin: user.isAdmin,
+			lead: user.isCampusLead || user.isHubLead,
 			position: user.jobTitle,
 			name: user.displayName,
-			preferredName: "Tobi"
+			preferredName: user.displayName
 		})
 	})
 }
