@@ -15,7 +15,7 @@ siteRouter.get("/", async (req, res) => {
 
 	res.render(site("profiles/userProfile"), {
 		admin: {
-			campus: campusCache.getCampusNames()
+			campus: campusCache.getCampusNameObject()
 		},
 		permissions: {
 			"lead": user.lead,
@@ -73,7 +73,7 @@ siteRouter.get("/leads", async (req, res) => {
 	let campusMembers: Array<_User> = [user];
 	res.render(site("dashboards/leadDashboard"), {
 		admin: {
-			campus: campusCache.getCampusNames()
+			campus: campusCache.getCampusNameObject()
 		},
 		permissions: {
 			lead: user.lead,
@@ -116,7 +116,7 @@ siteRouter.get("/users/:id", async (req, res) => {
 	}
 	res.render(site("profiles/userProfile"), {
 		admin: {
-			campus: campusCache.getCampusNames()
+			campus: campusCache.getCampusNameObject()
 		},
 		permissions: {
 			"lead": user.lead,

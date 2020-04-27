@@ -25,8 +25,15 @@ class CampusCache implements _Cache<CampusCache, _Campus> {
         })
 
     }
-    getCampusNames(): Array<string> {
-        return this.campusNames;
+    getCampusNameObject(): Array<{id:string, name:string}> {
+        let namesAndIds = [];
+        for(let campusIndex in this.dataMap) {
+            namesAndIds.push({
+                id: this.dataMap[campusIndex].id,
+                name: this.dataMap[campusIndex].name
+            })
+        }
+        return namesAndIds;
     }
     async get(campusId: string): Promise<_Campus | undefined> {
         return new Promise(resolve => {

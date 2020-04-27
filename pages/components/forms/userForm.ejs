@@ -15,11 +15,11 @@
 
 
         <% if(permissions.admin) { %>
-        <div class="c-select">
-            <label class="c-label" for="default">Campus</label>
-            <select id="campus" aria-label="Default select menu" data-selected-aria-label="Language choosen {0}">
+        <div class="c-select f-border">
+            <label class="c-label" for="campus">Campus</label>
+            <select id="campus" aria-label="Select menu with border" style="display: block;">
                 <% for(let i = 0; i < admin.campus.length; i++) { %>
-                <option class=""><%= admin.campus[i] %></option>
+                <option class="" ><%= admin.campus[i].name %>|<%= admin.campus[i].id %></option>
                 <% } %>
             </select>
         </div>
@@ -63,7 +63,10 @@
             const firstName = inputs[0].value;
             const lastName = inputs[1].value;
             const mail = inputs[2].value;
-            if (document.getElementById("campus")) const campus = document.getElementById("campus").value;
+            let campus = "";
+            if (document.getElementById("campus")) {
+                campus = document.getElementById("campus").value.split("|")[1];
+            }
 
 
             let labels = document.getElementById("userPopup").getElementsByTagName("label");
@@ -87,7 +90,7 @@
                     last: lastName,
                     mail: mail
                 }
-                if (campus) body.campus = campus;
+                if (campus != "") body.campus = campus;
                 fetch("/api/users", {
                     method: "POST",
                     headers: {

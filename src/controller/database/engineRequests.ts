@@ -79,7 +79,10 @@ export abstract class PeopleEngine {
             };
             if(!token && options.headers) options.headers.Authorization = "Bearer " + await getSystemToken();
             if(method) options.method = method;
-            if(body) options.body = body;
+            if(body) {
+                options.body = JSON.stringify(body);
+                if(options.headers) options.headers["Content-Type"] = "application/json";
+            }
 
             request(options,(error,response,body) => {
                 if(error || (response.statusCode > 299 || response.statusCode < 200)) {
