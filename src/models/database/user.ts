@@ -16,7 +16,8 @@ export interface _User {
 	eventIds: Array<string>;
 	projectCount: number;
 	eventCount: number;
-	init():Promise<_User>;
+    init():Promise<_User>;
+    setCampus(campus:_Campus):void;
 }
 
 export interface _DatabaseUser {

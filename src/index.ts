@@ -5,7 +5,7 @@ import bodyParser from "body-parser";
 
 import config from "./config";
 import loginApi from "./controller/auth/authApi";
-import { userCache } from "./controller/cache/cache";
+import { userCache, campusCache } from "./controller/cache/cache";
 import { _User } from "./models/database/user";
 import apiRouter from "./controller/api/router";
 import siteRouter from "./views/router";
@@ -40,7 +40,11 @@ app.use("/api", apiRouter);
 
 app.use("/", siteRouter);
 
-
-app.listen(process.env.PORT || 8000, () => {
-    console.info("Server is running! (Default port:8000)");
+userCache.init().then(() => {
+    campusCache.init().then(() => {
+        app.listen(process.env.PORT || 8000, () => {
+            console.info("Server is running! (Default port:8000)");
+        })
+    })
 })
+

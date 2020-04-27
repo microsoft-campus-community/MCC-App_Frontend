@@ -1,129 +1,132 @@
 <div id="userPopup" class="popup">
-	<div class="content">
-		<h2>Add a new member</h2>
+    <div class="content">
+        <h2>Add a new member</h2>
 
-		<div class="inputs">
-			<label class="c-label" for="default">First name</label>
-			<input class="c-text-field" type="text" name="default">
+        <div class="inputs">
+            <label class="c-label" for="default">First name</label>
+            <input class="c-text-field" type="text" name="default">
 
-			<label class="c-label" for="default">Last name</label>
-			<input class="c-text-field" type="text" name="default">
+            <label class="c-label" for="default">Last name</label>
+            <input class="c-text-field" type="text" name="default">
 
-			<label class="c-label" for="default">Alternative mail address</label>
-			<input class="c-text-field" type="text" name="default">
-		</div>
-
-
-		<% if(permissions.admin) { %>
-		<div class="c-select">
-			<label class="c-label" for="default">Campus</label>
-			<select aria-label="Default select menu" data-selected-aria-label="Language choosen {0}">
-				<% for(let i = 0; i < admin.campus.length; i++) { %>
-				<option class=""><%= admin.campus[i].name %>></option>
-				<% } %>
-			</select>
-		</div>
-
-		<% } %>
-		<div class="actionButtons">
-			<button class="c-button f-primary" onclick="createUser()">Add member</button>
-			<button class="c-button" onclick="toggleUserPopup()">Cancel</button>
-		</div>
-	</div>
-
-	<script>
-		function toggleUserPopup() {
-			let popup = document.getElementById("userPopup");
-			if (popup.style.display === "none" || popup.style.display === "") popup.style.display = "block";
-			else {
-				let inputs = document.getElementById("userPopup").getElementsByTagName("input");
-
-				for (let i = 0; i < inputs.length; i++) {
-					inputs[i].disabled = false;
-					inputs[i].value = "";
-				}
-
-				let btns = document.getElementById("userPopup").getElementsByClassName("actionButtons")[0].children;
-				let createBtn = btns[0];
-				let cancelBtn = btns[1];
-
-				createBtn.disabled = false;
-				cancelBtn.disabled = false;
-
-				createBtn.innerHTML = "Add member";
-				cancelBtn.innerHTML = "Cancel";
-
-				popup.style.display = "none";
-			}
-
-		}
-
-		function createUser() {
-			resetLabels();
-			let inputs = document.getElementById("userPopup").getElementsByTagName("input");
-			const firstName = inputs[0].value;
-			const lastName = inputs[1].value;
-			const mail = inputs[2].value;
-
-			let labels = document.getElementById("userPopup").getElementsByTagName("label");
-			if (firstName === "") {
-				labels[0].innerText = "First name (missing)";
-				labels[0].style.color = "red";
-			}
-			if (lastName === "") {
-				labels[1].innerText = "Last name (missing)";
-				labels[1].style.color = "red";
-			}
-			if (mail === "") {
-				labels[2].innerText = " Alternative mail address (missing)";
-				labels[2].style.color = "red";
-			}
-
-			if (firstName && lastName && mail) {
-				loadUi();
-				fetch("/api/users", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify({
-						first: firstName,
-						last: lastName,
-						mail: mail
-					})
-				}).then(response => {
-					if (response.status != 201) console.error("Uh oh!");
-					else resetUi();
-				})
-			}
-		}
+            <label class="c-label" for="default">Alternative mail address</label>
+            <input class="c-text-field" type="text" name="default">
+        </div>
 
 
-		function resetLabels() {
-			let labels = document.getElementById("userPopup").getElementsByTagName("label");
-			labels[0].innerText = "First name";
-			labels[0].style.color = "black";
-			labels[1].innerText = "Last name";
-			labels[1].style.color = "black";
-			labels[2].innerText = "Alternative mail address";
-			labels[2].style.color = "black";
-		} 
-		function loadUi() {
-			resetLabels();
+        <% if(permissions.admin) { %>
+        <div class="c-select">
+            <label class="c-label" for="default">Campus</label>
+            <select id="campus" aria-label="Default select menu" data-selected-aria-label="Language choosen {0}">
+                <% for(let i = 0; i < admin.campus.length; i++) { %>
+                <option class=""><%= admin.campus[i] %></option>
+                <% } %>
+            </select>
+        </div>
+        <% } %>
+        <div class="actionButtons">
+            <button class="c-button f-primary" onclick="createUser()">Add member</button>
+            <button class="c-button" onclick="toggleUserPopup()">Cancel</button>
+        </div>
+    </div>
 
-			let inputs = document.getElementById("userPopup").getElementsByTagName("input");
+    <script>
+        function toggleUserPopup() {
+            let popup = document.getElementById("userPopup");
+            if (popup.style.display === "none" || popup.style.display === "") popup.style.display = "block";
+            else {
+                let inputs = document.getElementById("userPopup").getElementsByTagName("input");
 
-			for (let i = 0; i < inputs.length; i++) {
-				inputs[i].disabled = true;
-			}
+                for (let i = 0; i < inputs.length; i++) {
+                    inputs[i].disabled = false;
+                    inputs[i].value = "";
+                }
 
-			let btns = document.getElementById("userPopup").getElementsByClassName("actionButtons")[0].children;
-			let createBtn = btns[0];
-			let cancelBtn = btns[1];
+                let btns = document.getElementById("userPopup").getElementsByClassName("actionButtons")[0].children;
+                let createBtn = btns[0];
+                let cancelBtn = btns[1];
 
-			createBtn.disabled = true;
-			cancelBtn.disabled = true;
-			createBtn.innerHTML = `
+                createBtn.disabled = false;
+                cancelBtn.disabled = false;
+
+                createBtn.innerHTML = "Add member";
+                cancelBtn.innerHTML = "Cancel";
+
+                popup.style.display = "none";
+            }
+
+        }
+
+        function createUser() {
+            resetLabels();
+            let inputs = document.getElementById("userPopup").getElementsByTagName("input");
+            const firstName = inputs[0].value;
+            const lastName = inputs[1].value;
+            const mail = inputs[2].value;
+            if (document.getElementById("campus")) const campus = document.getElementById("campus").value;
+
+
+            let labels = document.getElementById("userPopup").getElementsByTagName("label");
+            if (firstName === "") {
+                labels[0].innerText = "First name (missing)";
+                labels[0].style.color = "red";
+            }
+            if (lastName === "") {
+                labels[1].innerText = "Last name (missing)";
+                labels[1].style.color = "red";
+            }
+            if (mail === "") {
+                labels[2].innerText = " Alternative mail address (missing)";
+                labels[2].style.color = "red";
+            }
+
+            if (firstName && lastName && mail) {
+                loadUi();
+                let body = {
+                    first: firstName,
+                    last: lastName,
+                    mail: mail
+                }
+                if (campus) body.campus = campus;
+                fetch("/api/users", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(body)
+                }).then(response => {
+                    if (response.status != 201) console.error("Uh oh!");
+                    else resetUi();
+                })
+            }
+        }
+
+
+        function resetLabels() {
+            let labels = document.getElementById("userPopup").getElementsByTagName("label");
+            labels[0].innerText = "First name";
+            labels[0].style.color = "black";
+            labels[1].innerText = "Last name";
+            labels[1].style.color = "black";
+            labels[2].innerText = "Alternative mail address";
+            labels[2].style.color = "black";
+        }
+        function loadUi() {
+            resetLabels();
+
+            let inputs = document.getElementById("userPopup").getElementsByTagName("input");
+
+            for (let i = 0; i < inputs.length; i++) {
+                inputs[i].disabled = true;
+            }
+
+            let btns = document.getElementById("userPopup").getElementsByClassName("actionButtons")[0].children;
+            let createBtn = btns[0];
+            let cancelBtn = btns[1];
+
+            createBtn.disabled = true;
+            cancelBtn.disabled = true;
+            createBtn.innerHTML = `
 			<div class="c-progress f-indeterminate-regional" role="progressbar" aria-valuetext="Loading..." tabindex="0" aria-label="indeterminate regional progress bar">
 				<span></span>
 				<span></span>
@@ -132,14 +135,14 @@
 				<span></span>
 			</div>
 			`;
-		}
-		function resetUi() {
-			let btns = document.getElementById("userPopup").getElementsByClassName("actionButtons")[0].children;
-			let createBtn = btns[0];
-			let cancelBtn = btns[1];
-			createBtn.innerHTML = "Done!";
-			cancelBtn.innerHTML = "Close";
-			cancelBtn.disabled = false;
-		}
-	</script>
+        }
+        function resetUi() {
+            let btns = document.getElementById("userPopup").getElementsByClassName("actionButtons")[0].children;
+            let createBtn = btns[0];
+            let cancelBtn = btns[1];
+            createBtn.innerHTML = "Done!";
+            cancelBtn.innerHTML = "Close";
+            cancelBtn.disabled = false;
+        }
+    </script>
 </div>
