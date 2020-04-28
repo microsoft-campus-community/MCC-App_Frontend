@@ -83,6 +83,21 @@ class CampusCache implements _Cache<CampusCache, _Campus> {
             resolve();
         })
     }
+    async getUserCampus(userId:string):Promise<Array<_Campus>> {
+        return new Promise(async resolve => {
+            let cachedCampusKeyArray = Object.keys(this.dataMap);
+            let userCampusQueries:Array<Promise<_Campus|undefined>> = [];
+            cachedCampusKeyArray.forEach(campus => {
+                userCampusQueries.push(this.dataMap[campus].isUserPartOfCampus(userId));
+            })
+            let lookupResults = await Promise.all(userCampusQueries);
+            let userCampus:Array<_Campus> = [];
+            lookupResults.forEach(result => {
+                if(result) userCampus.push(result);
+            })
+            resolve(userCampus);
+        })
+    }
     clear() {
         return;
     }
@@ -115,6 +130,12 @@ class Campus implements _Campus {
     async getMemberIds(): Promise<Array<string>> {
         return new Promise(resolve => {
             resolve([]);
+        })
+    }
+    async isUserPartOfCampus(userId:string):Promise<_Campus|undefined> {
+        return new Promise(resolve => {
+            if(this.memberIds.includes(userId)) resolve(this);
+            else resolve(undefined);
         })
     }
 }

@@ -2,8 +2,6 @@ import jwt from "jsonwebtoken";
 import { _User, _AADToken } from "../../../models/database/user";
 import { _Campus } from "../../../models/database/campus";
 import { _Cache } from "../../../models/cache/cache";
-import { getUserProfile, getCampusId } from "../../../controller/database/user";
-import { campusCache } from "../cache";
 import { _Project } from "../../../models/database/project";
 import { PeopleEngine } from "../../database/engineRequests";
 
@@ -29,10 +27,14 @@ class UserCache implements _Cache<UserCache, _User>, _CacheDatabase<UserCache> {
             if (this.dataMap[id]) resolve(this.dataMap[id]);
             else {
                 let dbUser = await PeopleEngine.getUserById(id);
-                let user = new User(undefined, dbUser.id);
-                //let user = await new User(undefined,dbUser.id).init();
-                this.dataMap[user.id] = user;
-                resolve(user);
+                if (dbUser) {
+                    let user = await new User(undefined, dbUser.id).init();
+                    //let user = await new User(undefined,dbUser.id).init();
+                    this.dataMap[user.id] = user;
+                    resolve(user);
+                }
+                else console.error(`User with ID ${id} could not been found in the database!`);
+
             }
         })
     }
@@ -40,12 +42,17 @@ class UserCache implements _Cache<UserCache, _User>, _CacheDatabase<UserCache> {
         return new Promise(async resolve => {
             let users = await PeopleEngine.getAllUsers();
             users.forEach(user => {
-                let systemUser = new User(undefined,user.id);
+                let systemUser = new User(undefined, user.id);
                 systemUser.fromJson(user);
                 this.dataMap[user.id] = systemUser;
             })
             resolve(this);
         })
+    }
+    exists(userId: string): boolean {
+        let userIds = Object.keys(this.dataMap);
+        if (userIds.includes(userId)) return true;
+        return false;
     }
     clear() { return; }
 }
@@ -88,50 +95,22 @@ export class User implements _User {
 
     async init(): Promise<_User> {
         return new Promise(async resolve => {
-            let queries: Array<Promise<any>> = [
-                getCampusId(this.token),
-                getUserProfile(this.token),
-                //getProjectIds(this.id),
-                //getEventIds(this.id)
-            ];
-            let responses = await Promise.all(queries);
 
-            let campus = await campusCache.get(responses[0]);
-            if (!campus) {
-                console.error(`Campus ${responses[0]} not found when initializing user!`);
-                //TODO Only for mockup purposes!
-                //return;
-            };
-            this.campus = campus || {} as any;
-            this.admin = responses[1].admin;
-            this.lead = responses[1].lead;
-            this.position = responses[1].position;
-            this.name = responses[1].name;
-            this.preferredName = responses[1].preferredName;
-            // this.projectCount = responses[2].length;
-            // this.eventCount = responses[3].length;
-
-            // let projectIds: Array<string> = responses[3];
-            // projectIds.forEach(async id => {
-            // 	let project = await projectCache.get(id);
-            // 	if (!project) { console.error(`Project ${id} not found when initializing user!`); return };
-            // 	this.projects.push(project);
-            // })
-            // //TODO load all events
-            // this.eventIds = responses[4];
+            let user = await PeopleEngine.getUserById(this.id);
+            if (user) this.fromJson(user);
+            else console.error(`User ${this.id} doesn't exist in the database and could not been found!`);
             resolve(this);
-
         })
     }
     fromJson(object: any): void {
-        if(object.displayName) {
+        if (object.displayName) {
             this.name = object.displayName;
             this.preferredName = object.displayName;
         }
-        if(object.id) this.id = object.id;
-        if(object.jobTitle) this.position = object.jobTitle;
-        if(object.isAdmin) this.admin = true;
-        if(object.isCampusLead || object.isHubLead) this.lead = true;
+        if (object.id) this.id = object.id;
+        if (object.jobTitle) this.position = object.jobTitle;
+        if (object.isAdmin) this.admin = true;
+        if (object.isCampusLead || object.isHubLead) this.lead = true;
     }
     storeToken(jwtToken: string): void {
         let tokenInfo = jwt.decode(jwtToken);

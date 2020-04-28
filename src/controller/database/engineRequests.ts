@@ -7,14 +7,14 @@ import { _PeopleEngineUser, _PeopleEngineCampus, _PeopleEngineHub } from "../../
 export abstract class PeopleEngine {
     private static baseUrl:string = "https://commasto-api-dev.azurewebsites.net/api/";
 
-    static async getAllUsers():Promise<Array<_PeopleEngineUser>> {
-        let token = await getSystemToken();
-        return this.requestEngine("users?scope=full",token);
-    }
-    static async getUserById(id:string):Promise<_PeopleEngineUser> {
-        let token = await getSystemToken();
-        return this.requestEngineItem("users/"+id,token);
-    }
+        static async getAllUsers():Promise<Array<_PeopleEngineUser>> {
+            let token = await getSystemToken();
+            return this.requestEngineArray("users?scope=full",token);
+        }
+        static async getUserById(id:string):Promise<_PeopleEngineUser|undefined> {
+            let token = await getSystemToken();
+            return this.requestEngineItem("users/"+id+"?scope=full",token);
+        }
 
     //Must be done through delegated for audit reasons!
     static async createUser(token:string,body:{[key:string]:any}):Promise<_PeopleEngineUser> {
@@ -23,7 +23,7 @@ export abstract class PeopleEngine {
             resolve(user);
         })
     }
-    static async getCurrentUser(token:string):Promise<_PeopleEngineUser> {
+    static async getCurrentUser(token:string):Promise<_PeopleEngineUser|undefined> {
         return this.requestEngineItem("users/current?scope=full",token);
     }
     static async getCurrentUserCampus(token:string):Promise<_PeopleEngineCampus> {
@@ -34,7 +34,7 @@ export abstract class PeopleEngine {
     }
 
     static async getAllHubs(token:string):Promise<Array<_PeopleEngineHub>> {
-        return this.requestEngine("hubs",token);
+        return this.requestEngineArray("hubs",token);
     }
     static async getHub(hubId:string):Promise<_PeopleEngineHub> {
         let token = await getSystemToken();
@@ -42,12 +42,12 @@ export abstract class PeopleEngine {
     }
     static async getAllCampusInHub(hubId:string):Promise<Array<_PeopleEngineCampus>> {
         let token = await getSystemToken();
-        return this.requestEngine("hubs/"+hubId+"/campus",token);
+        return this.requestEngineArray("hubs/"+hubId+"/campus",token);
     }
 
     static async getAllCampus():Promise<Array<_PeopleEngineCampus>> {
         let token = await getSystemToken();
-        return this.requestEngine("hubs/campus",token);
+        return this.requestEngineArray("hubs/campus",token);
     }
     static async getCampus(campusId:string):Promise<_PeopleEngineCampus> {
         let token = await getSystemToken();
@@ -56,17 +56,17 @@ export abstract class PeopleEngine {
     }
     static async getAllCampusMembers(hubId:string, campusId:string):Promise<Array<_PeopleEngineUser>> {
         let token = await getSystemToken();
-        return this.requestEngine("hubs/"+hubId+"/campus/"+campusId+"/users",token);
+        return this.requestEngineArray("hubs/"+hubId+"/campus/"+campusId+"/users",token);
     }
 
     //Utility functions
     private static async requestEngineItem(database:string, token?:string, method?:string, body?:{[key:string]:any}):Promise<any> {
         return new Promise(async resolve => {
-            resolve((await this.requestEngine(database,token,method,body))[0]);
+            resolve((await this.requestEngineArray(database,token,method,body))[0]);
         })
 
     }
-    private static async requestEngine(database:string, token?:string, method?:string, body?:{[key:string]:any}):Promise<Array<any>> {
+    private static async requestEngineArray(database:string, token?:string, method?:string, body?:{[key:string]:any}):Promise<Array<any>> {
         return new Promise(async resolve => {
             const endpoint = this.baseUrl + database;
 

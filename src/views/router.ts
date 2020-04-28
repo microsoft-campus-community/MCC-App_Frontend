@@ -22,12 +22,12 @@ siteRouter.get("/", async (req, res) => {
 			"admin": user.admin
 		},
 		user: {
-			"Name": user.name,
-			"Campus": user.campus.name,
-			"Preferred name": user.preferredName,
-			"Projects": user.projectCount,
-			"Events": user.eventCount,
-			"Current position": user.position
+			name: user.name,
+			campus: user.campus.name,
+			projectCount: user.projectCount,
+			eventCount: user.eventCount,
+            position: user.position,
+            joinedDate: "N/A",
 		},
 		joinedDate: "Coming soon!",
 		name: user.name,
@@ -69,8 +69,8 @@ siteRouter.get("/leads", async (req, res) => {
 	if (!campus) {
 		res.status(403).send("Lead has no campus attached or campus does not exist!");
 		return;
-	}
-	let campusMembers: Array<_User> = [user];
+    }
+	let campusMembers: Array<_User> = user.campus.members;
 	res.render(site("dashboards/leadDashboard"), {
 		admin: {
 			campus: campusCache.getCampusNameObject()
