@@ -4,10 +4,9 @@ import session from "express-session";
 import bodyParser from "body-parser";
 
 import config from "./config";
-import loginApi from "./modules/api/controller/auth/authApi";
 import { userCache, campusCache } from "./modules/cache/controller/cacheObjects";
 import { _User } from "./modules/cache/models/user";
-import apiRouter from "./modules/api/controller/api/router";
+import {apiRouter, authRouter} from "./modules/endpoints/controller/router";
 import siteRouter from "./modules/views/router";
 
 
@@ -21,7 +20,7 @@ app.use(session({
     saveUninitialized: true
 }));
 
-app.use("/auth", loginApi);
+app.use("/auth", authRouter);
 
 app.use(async (req, res, next) => {
     if (req.session && req.session.session) {

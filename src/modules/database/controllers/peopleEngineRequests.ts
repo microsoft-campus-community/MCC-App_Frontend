@@ -1,7 +1,7 @@
 import request, { UrlOptions, CoreOptions } from "request";
-import { getSystemToken } from "../../api/controller/auth/authUtil";
+import { getSystemToken } from "../../endpoints/controller/systemAuth";
 import { _PeopleEngineUser, _PeopleEngineCampus, _PeopleEngineHub } from "../models/_peopleEngine";
-import { userCache } from "../../cache/controller/cache";
+import { userCache } from "../../cache/controller/cacheObjects";
 import { User } from "../../cache/controller/cacheDatabases/user";
 
 
