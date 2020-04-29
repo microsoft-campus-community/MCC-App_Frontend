@@ -10,6 +10,9 @@ class UserCache implements _Cache<UserCache, _User>, _CacheDatabase<UserCache> {
 
     constructor() {
         this.dataMap = {};
+        setInterval(async () => {
+            await this.refresh()
+        }, 60 * 60 * 1000)
     }
 
     set(item: _User): Promise<boolean> {
@@ -54,7 +57,18 @@ class UserCache implements _Cache<UserCache, _User>, _CacheDatabase<UserCache> {
         if (userIds.includes(userId)) return true;
         return false;
     }
-    clear() { return; }
+    //TODO Implement clear function
+    clear(): void {
+        this.dataMap = {};
+    }
+    //TODO Implement refresh function
+    async refresh(): Promise<void> {
+        return new Promise(async resolve => {
+            this.clear();
+            await this.init();
+            resolve();
+        })
+    }
 }
 
 export class User implements _User {

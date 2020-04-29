@@ -8,11 +8,11 @@ class ProjectCache implements _Cache<ProjectCache,_Project>, _CacheDatabase<Proj
 
 	//TODO Swap with interface
 	private projectMap:{[id:string]:_Project};
-	
+
 
 	constructor() {
 		this.projectMap = {};
-		
+
 	}
 
 	init():Promise<ProjectCache> {
@@ -44,9 +44,10 @@ class ProjectCache implements _Cache<ProjectCache,_Project>, _CacheDatabase<Proj
 		for (const key in this.projectMap) {
 			if(this.projectMap[key].completed) delete this.projectMap[key];
 		}
-	}
+    }
+    refresh():void {}
 
-	
+
 }
 
 export class Project implements _Project,_CacheDatabase<_Project> {

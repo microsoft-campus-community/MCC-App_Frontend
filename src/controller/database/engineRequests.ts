@@ -1,6 +1,8 @@
 import request, { UrlOptions, CoreOptions } from "request";
 import { getSystemToken } from "../auth/authUtil";
 import { _PeopleEngineUser, _PeopleEngineCampus, _PeopleEngineHub } from "../../models/database/engines";
+import { userCache } from "../cache/cache";
+import { User } from "../cache/cacheDatabases/user";
 
 
 
@@ -20,6 +22,9 @@ export abstract class PeopleEngine {
     static async createUser(token:string,body:{[key:string]:any}):Promise<_PeopleEngineUser> {
         return new Promise(async resolve => {
             let user = await this.requestEngineItem("users",token,"POST",body);
+            let userObj = new User(undefined,user.id);
+            userObj.fromJson(user);
+            userCache.set(userObj);
             resolve(user);
         })
     }

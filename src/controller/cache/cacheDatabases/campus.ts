@@ -13,8 +13,10 @@ class CampusCache implements _Cache<CampusCache, _Campus> {
     constructor() {
         this.dataMap = {
         }
-
         this.campusNames = [];
+        setInterval(async () => {
+            await this.refresh()
+        }, 60 * 60 * 1000);
     }
 
     set(campusObj: _Campus): Promise<boolean> {
@@ -41,7 +43,7 @@ class CampusCache implements _Cache<CampusCache, _Campus> {
             //TODO load campus from database
         })
     }
-    init(): Promise<CampusCache> {
+    async init(): Promise<CampusCache> {
         return new Promise(async resolve => {
             let allDatabaseCampus = await PeopleEngine.getAllCampus();
             let memberQueries:Array<Promise<Array<_PeopleEngineUser>>> = [];
@@ -98,9 +100,16 @@ class CampusCache implements _Cache<CampusCache, _Campus> {
             resolve(userCampus);
         })
     }
+    //TODO Implement clear function
     clear() {
-        return;
-    }
+        this.dataMap = {};
+        this.campusNames = [];
+     }
+    //TODO Implement refresh function
+    async refresh() {
+        this.clear();
+        await this.init();
+     }
 }
 
 class Campus implements _Campus {
