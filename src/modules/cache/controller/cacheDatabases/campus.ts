@@ -1,9 +1,9 @@
-import { _Campus } from "../../../models/database/campus";
-import { _User } from "../../../models/database/user";
-import { _Cache } from "../../../models/cache/cache";
-import { PeopleEngine } from "../../database/engineRequests";
-import { userCache } from "../cache";
-import { _PeopleEngineCampus, _PeopleEngineUser } from "../../../models/database/engines";
+import { _Campus } from "../../models/campus";
+import { _User } from "../../models/user";
+import { _Cache } from "../../models/cacheStructure";
+import { PeopleEngine } from "../../../database/controllers/peopleEngineRequests";
+import { userCache } from "../cacheObjects";
+import { _PeopleEngineCampus, _PeopleEngineUser } from "../../../database/models/_peopleEngine";
 
 
 class CampusCache implements _Cache<CampusCache, _Campus> {
@@ -20,7 +20,6 @@ class CampusCache implements _Cache<CampusCache, _Campus> {
     }
 
     set(campusObj: _Campus): Promise<boolean> {
-        //TODO
         return new Promise(resolve => {
             this.dataMap[campusObj.id] = campusObj;
             resolve(true);
@@ -100,12 +99,10 @@ class CampusCache implements _Cache<CampusCache, _Campus> {
             resolve(userCampus);
         })
     }
-    //TODO Implement clear function
     clear() {
         this.dataMap = {};
         this.campusNames = [];
      }
-    //TODO Implement refresh function
     async refresh() {
         this.clear();
         await this.init();
@@ -118,27 +115,25 @@ class Campus implements _Campus {
     leadId: string;
     memberIds: Array<string>;
     members: Array<_User>;
-    eventIds: Array<string>;
 
     constructor(campusObj: { [key: string]: any }) {
         this.id = campusObj.id;
         this.name = campusObj.name;
         this.leadId = campusObj.leadId;
         this.memberIds = campusObj.memberIds;
-        this.eventIds = campusObj.eventIds;
         this.members = campusObj.members;
     }
     async init(): Promise<void> {
         return new Promise(async resolve => {
-            let values = await Promise.all([
-                this.getMemberIds()
-            ]);
-            this.memberIds = values[0];
-        })
-    }
-    async getMemberIds(): Promise<Array<string>> {
-        return new Promise(resolve => {
-            resolve([]);
+            let values = await PeopleEngine.getCampus(this.id);
+            this.name = values.name;
+            this.leadId = values.lead;
+            let members = await PeopleEngine.getAllCampusMembers("",this.id);
+            members.forEach(async member => {
+                this.memberIds.push(member.id);
+                let user = await userCache.get(member.id);
+                if(user) this.members.push(user);
+            })
         })
     }
     async isUserPartOfCampus(userId:string):Promise<_Campus|undefined> {

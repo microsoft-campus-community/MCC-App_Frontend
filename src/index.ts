@@ -4,11 +4,10 @@ import session from "express-session";
 import bodyParser from "body-parser";
 
 import config from "./config";
-import loginApi from "./controller/auth/authApi";
-import { userCache, campusCache } from "./controller/cache/cache";
-import { _User } from "./models/database/user";
-import apiRouter from "./controller/api/router";
-import siteRouter from "./views/router";
+import { userCache, campusCache } from "./modules/cache/controller/cacheObjects";
+import { _User } from "./modules/cache/models/user";
+import {apiRouter, authRouter} from "./modules/endpoints/controller/router";
+import siteRouter from "./modules/views/router";
 
 
 const app = express();
@@ -21,7 +20,7 @@ app.use(session({
     saveUninitialized: true
 }));
 
-app.use("/auth", loginApi);
+app.use("/auth", authRouter);
 
 app.use(async (req, res, next) => {
     if (req.session && req.session.session) {

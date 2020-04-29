@@ -1,12 +1,13 @@
 import request, { UrlOptions, CoreOptions } from "request";
-import { getSystemToken } from "../auth/authUtil";
-import { _PeopleEngineUser, _PeopleEngineCampus, _PeopleEngineHub } from "../../models/database/engines";
-import { userCache } from "../cache/cache";
-import { User } from "../cache/cacheDatabases/user";
+import { getSystemToken } from "../../endpoints/controller/systemAuth";
+import { _PeopleEngineUser, _PeopleEngineCampus, _PeopleEngineHub } from "../models/_peopleEngine";
+import { userCache } from "../../cache/controller/cacheObjects";
+import { User } from "../../cache/controller/cacheDatabases/user";
 
 
 
 export abstract class PeopleEngine {
+    //TODO Define dev and production endpoint
     private static baseUrl:string = "https://commasto-api-dev.azurewebsites.net/api/";
 
         static async getAllUsers():Promise<Array<_PeopleEngineUser>> {

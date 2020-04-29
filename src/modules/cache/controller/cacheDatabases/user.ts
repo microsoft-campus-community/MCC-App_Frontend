@@ -1,11 +1,10 @@
 import jwt from "jsonwebtoken";
-import { _User, _AADToken } from "../../../models/database/user";
-import { _Campus } from "../../../models/database/campus";
-import { _Cache } from "../../../models/cache/cache";
-import { _Project } from "../../../models/database/project";
-import { PeopleEngine } from "../../database/engineRequests";
+import { _User, _AADToken } from "../../models/user";
+import { _Campus } from "../../models/campus";
+import { _Cache } from "../../models/cacheStructure";
+import { PeopleEngine } from "../../../database/controllers/peopleEngineRequests";
 
-class UserCache implements _Cache<UserCache, _User>, _CacheDatabase<UserCache> {
+class UserCache implements _Cache<UserCache, _User> {
     private dataMap: { [key: string]: _User };
 
     constructor() {
@@ -32,7 +31,6 @@ class UserCache implements _Cache<UserCache, _User>, _CacheDatabase<UserCache> {
                 let dbUser = await PeopleEngine.getUserById(id);
                 if (dbUser) {
                     let user = await new User(undefined, dbUser.id).init();
-                    //let user = await new User(undefined,dbUser.id).init();
                     this.dataMap[user.id] = user;
                     resolve(user);
                 }
@@ -57,11 +55,9 @@ class UserCache implements _Cache<UserCache, _User>, _CacheDatabase<UserCache> {
         if (userIds.includes(userId)) return true;
         return false;
     }
-    //TODO Implement clear function
     clear(): void {
         this.dataMap = {};
     }
-    //TODO Implement refresh function
     async refresh(): Promise<void> {
         return new Promise(async resolve => {
             this.clear();
@@ -80,9 +76,6 @@ export class User implements _User {
     projectCount: number;
     eventCount: number;
     position: string;
-    projects: Array<_Project>;
-    eventIds: Array<string>;
-
     token: string = "";
     userInformation?: _AADToken;
     admin: boolean;
@@ -100,8 +93,6 @@ export class User implements _User {
         this.position = "";
         this.projectCount = 0;
         this.eventCount = 0;
-        this.projects = [];
-        this.eventIds = [];
         this
         this.admin = false;
         this.lead = false;

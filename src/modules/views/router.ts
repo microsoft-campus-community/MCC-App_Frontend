@@ -1,8 +1,8 @@
 import express from "express";
 import path from "path";
 
-import { userCache, campusCache } from "../controller/cache/cache";
-import { _User } from "../models/database/user";
+import { userCache, campusCache } from "../cache/controller/cacheObjects";
+import { _User } from "../cache/models/user";
 
 const siteRouter = express.Router();
 
@@ -64,7 +64,6 @@ siteRouter.get("/leads", async (req, res) => {
         res.status(403).send("This page is unfortunately only available for leads. Please head back to <a href='/'>the homepage</a>.");
         return;
     }
-
 	let campus = user.campus;
 	if (!campus) {
 		res.status(403).send("Lead has no campus attached or campus does not exist!");
@@ -106,7 +105,6 @@ siteRouter.get("/leads", async (req, res) => {
 	});
 })
 
-
 siteRouter.get("/users/:id", async (req, res) => {
 	let userId = req.params.id;
 	let user: _User | undefined = req.session ? await userCache.get(userId) : undefined;
@@ -147,7 +145,9 @@ siteRouter.get("/users/:id", async (req, res) => {
 		eventCount: 0,
 	})
 })
-siteRouter.get("/events/:id", (req, res) => {
+
+
+/* siteRouter.get("/events/:id", (req, res) => {
 	res.render(site("profiles/eventProfile"));
 })
 siteRouter.get("/applications/:id", (req, res) => {
@@ -155,13 +155,14 @@ siteRouter.get("/applications/:id", (req, res) => {
 })
 siteRouter.get("/projects/:id", (req, res) => {
 	res.render(site("profiles/projectProfile"));
-})
+}) */
 
 siteRouter.get("/offline", (req,res) => {
 	res.render(site("dashboards/offlineDashboard"));
 })
 
-const sites = path.join(__dirname, "..", "..", "pages", "sites");
+//Define and easily render paths to site templates
+const sites = path.join(__dirname, "..", "..", "..", "pages", "sites");
 function site(siteName: string): string {
 	return path.join(sites, siteName + ".ejs");
 }
