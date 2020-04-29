@@ -1,12 +1,12 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - mcc-commasto-frontend
+name: Develop Build
 
 on:
   push:
     branches:
-      - master
+      - develop
 
 jobs:
   build-and-deploy:
@@ -28,7 +28,7 @@ jobs:
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v1
       with:
-        app-name: 'mcc-commasto-frontend'
+        app-name: 'mcc-commasto-dev'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_b804d2c4db294714be2f3e0d5c67aca4 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_Dev }}
         package: .
