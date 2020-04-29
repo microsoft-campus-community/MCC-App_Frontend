@@ -1,30 +1,29 @@
 <%- include("../../shell/shellStart") %>
 
 
-<h2 class="userName"><%= name %></h2>
+<h2 class="userName"><%= user.name %></h2>
 
 
 <div class="factRow">
 	<div class="factBox">
-		<p class="fact"><%= joinedDate %></p>
-		<span class="label">joined community</span>
+		<p class="fact">Coming soon</p>
+		<span class="label">Joined on</span>
 	</div>
 	<div class="enforce-one-line">
 		<div class="factBox">
-			<span class="fact"><%= projectCount %></span>
+			<span class="fact"><%= user.projectCount%></span>
 			<span class="label">projects</span>
 		</div>
 		<div class="factBox">
-			<span class="fact"><%= eventCount %></span>
+			<span class="fact"><%= user.eventCount %></span>
 			<span class="label">events</span>
 		</div>
 	</div>
 	<div class="factBox campus">
-		<p class="fact"><%= campus %></p>
+		<p class="fact"><%= user.campus %></p>
 		<span class="label">active campus</span>
 	</div>
 </div>
-
 
 <%- include("../../components/lists/plannedEvents") %>
 <%- include("../../components/lists/completedEvents") %>

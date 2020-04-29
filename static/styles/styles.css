@@ -68,7 +68,7 @@ main h2 {
 }
 
 nav {
-	position: absolute;
+	position: fixed;
 	top: 15vh;
 	height: 0;
 	left: 0;

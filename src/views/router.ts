@@ -15,45 +15,43 @@ siteRouter.get("/", async (req, res) => {
 
 	res.render(site("profiles/userProfile"), {
 		admin: {
-			campus: [{ name: "Munich" }, { name: "Stuttgart" }, { name: "Hamburg" }, { name: "Köln" }, { name: "Frankfurt" }]
+			campus: campusCache.getCampusNameObject()
 		},
 		permissions: {
 			"lead": user.lead,
 			"admin": user.admin
 		},
 		user: {
-			"Name": user.name,
-			"Campus": user.campus.name,
-			"Preferred name": user.preferredName,
-			"Projects": user.projectCount,
-			"Events": user.eventCount,
-			"Current position": user.position
+			name: user.name,
+			campus: user.campus.name,
+			projectCount: user.projectCount,
+			eventCount: user.eventCount,
+            position: user.position,
+            joinedDate: "N/A",
 		},
-		joinedDate: "24.01.2020",
+		joinedDate: "Coming soon!",
 		name: user.name,
 		campus: user.campus.name,
-		plannedEvents: [{
+		plannedEvents: [
+            /* {
 			name: "Awesome hack",
 			eventDate: "18.03.2020",
 			id: "123-342-gds42"
-		}],
-		completedEvents: [{
+        } */
+    ],
+		completedEvents: [
+            /* {
 			name: "Retro hack",
 			eventDate: "18.01.2020",
 			id: "123-342-gds42"
-		}, {
-			name: "AI Workshop",
-			eventDate: "18.03.2019",
-			id: "123-342-gds42"
-		}],
+        } */
+    ],
 		plannedProjects: [
-			{ title: "World-saving ultra awesome app that is as great as the name is long" },
-			{ title: "Tinder for cats" },
-			{ title: "MCC internal app" }
+			//{ title: "World-saving ultra awesome app that is as great as the name is long" }
 		],
 		completedProjects: [],
-		projectCount: 3,
-		eventCount: 4,
+		projectCount: 0,
+		eventCount: 0,
 	})
 })
 siteRouter.get("/leads", async (req, res) => {
@@ -61,26 +59,21 @@ siteRouter.get("/leads", async (req, res) => {
 	if (!user) {
 		res.status(403).send();
 		return;
-	}
+    }
+    if(!user.lead) {
+        res.status(403).send("This page is unfortunately only available for leads. Please head back to <a href='/'>the homepage</a>.");
+        return;
+    }
 
 	let campus = user.campus;
 	if (!campus) {
 		res.status(403).send("Lead has no campus attached or campus does not exist!");
 		return;
-	}
-	let campusMembers: Array<_User> = [user];
-	//TODO This should belong to a caching class
-	// campus.memberIds.forEach(async id => {
-	// 	let user = await userCache.get(id);
-	// 	if(!user) {
-	// 		res.status(403).send("At least one user listed for the campus does not exist!");
-	// 		return;
-	// 	}
-	// 	campusMembers.push();
-	// })
+    }
+	let campusMembers: Array<_User> = user.campus.members;
 	res.render(site("dashboards/leadDashboard"), {
 		admin: {
-			campus: campusCache.getCampusNames()
+			campus: campusCache.getCampusNameObject()
 		},
 		permissions: {
 			lead: user.lead,
@@ -96,34 +89,19 @@ siteRouter.get("/leads", async (req, res) => {
 		},
 		members: campusMembers,
 		applications: [
-			{
+			/* {
 				id: "234-rwdr-5oi3",
 				name: "Tobias Urban",
 				applicationDate: "20.02.2019"
-			},
-			{
-				id: "234-rwdr-5oi3",
-				name: "Felix Schober",
-				applicationDate: "13.11.2019"
-			},
-			{
-				id: "234-rwdr-5oi3",
-				name: "Newly added member with long name",
-				applicationDate: "12.01.2020"
-			}
+			} */
 		],
 		//TODO get events for campus
 		plannedEvents: [
-			{
+			/* {
 				id: "234-rwdr-5oi3",
 				name: "Superhack",
 				eventDate: "15.03.2020"
-			},
-			{
-				id: "234-rwdr-5oi3",
-				name: "AI Workshop",
-				eventDate: "01.04.2020"
-			}
+			} */
 		]
 	});
 })
@@ -138,45 +116,35 @@ siteRouter.get("/users/:id", async (req, res) => {
 	}
 	res.render(site("profiles/userProfile"), {
 		admin: {
-			campus: [{ name: "Munich" }, { name: "Stuttgart" }, { name: "Hamburg" }, { name: "Köln" }, { name: "Frankfurt" }]
+			campus: campusCache.getCampusNameObject()
 		},
 		permissions: {
 			"lead": user.lead,
 			"admin": user.admin
 		},
 		user: {
-			"Name": user.name,
-			"Campus": user.campus.name,
-			"Preferred name": user.preferredName,
-			"Projects": user.projectCount,
-			"Events": user.eventCount,
-			"Current position": user.position
+			name: user.name,
+			campus: user.campus.name,
+			projectCount: user.projectCount,
+			eventCount: user.eventCount,
+            position: user.position,
+            joinedDate: "N/A",
 		},
-		joinedDate: "24.01.2020",
-		name: "Example User",
-		campus: "Munich",
-		plannedEvents: [{
+
+		plannedEvents: [
+            /* {
 			name: "Awesome hack",
 			eventDate: "18.03.2020",
 			id: "123-342-gds42"
-		}],
-		completedEvents: [{
-			name: "Retro hack",
-			eventDate: "18.01.2020",
-			id: "123-342-gds42"
-		}, {
-			name: "AI Workshop",
-			eventDate: "18.03.2019",
-			id: "123-342-gds42"
-		}],
+        } */
+    ],
+		completedEvents: [],
 		plannedProjects: [
-			{ title: "World-saving ultra awesome app that is as great as the name is long" },
-			{ title: "Tinder for cats" },
-			{ title: "MCC internal app" }
+			//{ title: "World-saving ultra awesome app that is as great as the name is long" }
 		],
 		completedProjects: [],
-		projectCount: 3,
-		eventCount: 4,
+		projectCount: 0,
+		eventCount: 0,
 	})
 })
 siteRouter.get("/events/:id", (req, res) => {
