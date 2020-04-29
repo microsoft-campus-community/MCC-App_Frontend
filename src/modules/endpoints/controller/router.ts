@@ -27,7 +27,6 @@ authRouter.get(config.redirectUrl, async (req, res) => {
     }
     else {
         if (req.session) req.session.session = userId;
-        res.cookie("session", userId, { httpOnly: true, signed: true });
         req.query.state ? res.redirect(req.query.state) : res.redirect("/");
     }
 })

@@ -162,7 +162,7 @@ siteRouter.get("/offline", (req,res) => {
 })
 
 //Define and easily render paths to site templates
-const sites = path.join(__dirname, "..", "..", "pages", "sites");
+const sites = path.join(__dirname, "..", "..", "..", "pages", "sites");
 function site(siteName: string): string {
 	return path.join(sites, siteName + ".ejs");
 }
