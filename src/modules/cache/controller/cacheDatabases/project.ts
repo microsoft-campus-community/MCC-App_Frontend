@@ -1,8 +1,8 @@
-import { _User } from "../../../models/database/user";
-import { _Campus } from "../../../models/database/campus";
-import { _Cache } from "../../../models/cache/cache";
+import { _User } from "../../models/user";
+import { _Campus } from "../../models/campus";
+import { _Cache } from "../../models/cache";
 import { userCache } from "../cache";
-import { _Project } from "../../../models/database/project";
+import { _Project } from "../../models/project";
 
 class ProjectCache implements _Cache<ProjectCache,_Project>, _CacheDatabase<ProjectCache> {
 

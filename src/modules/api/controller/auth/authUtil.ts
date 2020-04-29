@@ -1,5 +1,5 @@
 import request from "request";
-import config from "../../config";
+import config from "../../../../config";
 
 let systemToken:string = "";
 let refreshTimeStamp:number = new Date().getTime();

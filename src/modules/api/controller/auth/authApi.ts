@@ -1,9 +1,9 @@
 import express from "express";
 import request from "request";
 
-import config from "../../config";
-import { userCache } from "../cache/cache";
-import { User } from "../cache/cacheDatabases/user";
+import config from "../../../../config";
+import { userCache } from "../../../cache/controller/cache";
+import { User } from "../../../cache/controller/cacheDatabases/user";
 
 const apiRouter = express.Router();
 

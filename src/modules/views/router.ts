@@ -1,8 +1,8 @@
 import express from "express";
 import path from "path";
 
-import { userCache, campusCache } from "../controller/cache/cache";
-import { _User } from "../models/database/user";
+import { userCache, campusCache } from "../../modules/cache/controller/cache";
+import { _User } from "../cache/models/user";
 
 const siteRouter = express.Router();
 

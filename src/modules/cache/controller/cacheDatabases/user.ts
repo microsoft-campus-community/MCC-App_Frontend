@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
-import { _User, _AADToken } from "../../../models/database/user";
-import { _Campus } from "../../../models/database/campus";
-import { _Cache } from "../../../models/cache/cache";
-import { _Project } from "../../../models/database/project";
-import { PeopleEngine } from "../../database/engineRequests";
+import { _User, _AADToken } from "../../models/user";
+import { _Campus } from "../../models/campus";
+import { _Cache } from "../../models/cache";
+import { _Project } from "../../models/project";
+import { PeopleEngine } from "../../../database/controllers/peopleEngineRequests";
 
 class UserCache implements _Cache<UserCache, _User>, _CacheDatabase<UserCache> {
     private dataMap: { [key: string]: _User };

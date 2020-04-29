@@ -1,11 +1,11 @@
 import express from "express";
 import request from "request";
 
-import { userCache } from "../cache/cache";
+import { userCache } from "../../../cache/controller/cache";
 import { getSystemToken } from "../auth/authUtil";
-import { _User } from "../../models/database/user";
-import config from "../../config";
-import { PeopleEngine } from "../database/engineRequests";
+import { _User } from "../../../cache/models/user";
+import config from "../../../../config";
+import { PeopleEngine } from "../../../database/controllers/peopleEngineRequests";
 
 const apiRouter = express.Router();
 
