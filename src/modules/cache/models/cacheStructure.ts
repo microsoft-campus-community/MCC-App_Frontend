@@ -5,5 +5,4 @@ export interface _Cache<Cache,Database>{
 	clear():void;
     init():Promise<Cache>;
     refresh():void;
-
 }

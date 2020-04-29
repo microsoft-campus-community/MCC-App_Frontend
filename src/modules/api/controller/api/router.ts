@@ -1,7 +1,7 @@
 import express from "express";
 import request from "request";
 
-import { userCache } from "../../../cache/controller/cache";
+import { userCache } from "../../../cache/controller/cacheObjects";
 import { getSystemToken } from "../auth/authUtil";
 import { _User } from "../../../cache/models/user";
 import config from "../../../../config";

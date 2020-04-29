@@ -1,5 +1,4 @@
 import { _Campus } from "./campus";
-import { _Project } from "./project";
 
 export interface _User {
 	name: string;
@@ -12,22 +11,12 @@ export interface _User {
 
 	admin: boolean;
 	lead: boolean;
-	projects: Array<_Project>;
-	eventIds: Array<string>;
 	projectCount: number;
     eventCount: number;
 
     init():Promise<_User>;
     setCampus(campus:_Campus):void;
     storeToken(jwtToken: string):void;
-}
-
-export interface _DatabaseUser {
-	admin: boolean;
-	lead: boolean;
-	position: string;
-	name: string;
-	preferredName: string;
 }
 
 export interface _AADToken {

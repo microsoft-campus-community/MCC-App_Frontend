@@ -1,9 +1,9 @@
 import { _Campus } from "../../models/campus";
 import { _User } from "../../models/user";
-import { _Cache } from "../../models/cache";
+import { _Cache } from "../../models/cacheStructure";
 import { PeopleEngine } from "../../../database/controllers/peopleEngineRequests";
-import { userCache } from "../cache";
-import { _PeopleEngineCampus, _PeopleEngineUser } from "../../../database/models/engines";
+import { userCache } from "../cacheObjects";
+import { _PeopleEngineCampus, _PeopleEngineUser } from "../../../database/models/_peopleEngine";
 
 
 class CampusCache implements _Cache<CampusCache, _Campus> {
