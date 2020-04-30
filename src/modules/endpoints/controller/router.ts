@@ -6,7 +6,6 @@ import config from "../../../config";
 import request from "request";
 
 import { userCache } from "../../cache/controller/cacheObjects";
-import { getSystemToken } from "./systemAuth";
 import { _User } from "../../cache/models/user";
 import { PeopleEngine } from "../../database/controllers/peopleEngineRequests";
 import { postIdea } from "./api";
