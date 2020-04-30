@@ -39,7 +39,8 @@ export abstract class PeopleEngine {
         return this.requestEngineItem("hubs/my",token);
     }
 
-    static async getAllHubs(token:string):Promise<Array<_PeopleEngineHub>> {
+    static async getAllHubs():Promise<Array<_PeopleEngineHub>> {
+        let token = await getSystemToken();
         return this.requestEngineArray("hubs",token);
     }
     static async getHub(hubId:string):Promise<_PeopleEngineHub> {
@@ -70,7 +71,6 @@ export abstract class PeopleEngine {
         return new Promise(async resolve => {
             resolve((await this.requestEngineArray(database,token,method,body))[0]);
         })
-
     }
     private static async requestEngineArray(database:string, token?:string, method?:string, body?:{[key:string]:any}):Promise<Array<any>> {
         return new Promise(async resolve => {
