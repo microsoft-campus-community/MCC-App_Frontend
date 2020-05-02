@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "jest",
+        "test": "jest --detectOpenHandles",
         "build": "tsc && node dest/index",
         "run": "node dest/index"
     },
@@ -39,6 +39,10 @@
             "ts",
             "tsx",
             "js"
-        ]
+        ],
+        "collectCoverage": true,
+        "coverageReporters": ["html"],
+        "testTimeout": 10000,
+        "timers": "fake"
     }
 }
