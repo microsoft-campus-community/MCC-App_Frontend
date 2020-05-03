@@ -9,7 +9,7 @@ import { _Cache } from "../../models/cacheStructure";
 
 
 export class HubCache implements _Cache<HubCache, _Hub> {
-    private dataMap: { [key: string]: _Hub };
+    dataMap: { [key: string]: _Hub };
 
     constructor() {
         this.dataMap = {
@@ -30,6 +30,10 @@ export class HubCache implements _Cache<HubCache, _Hub> {
         return new Promise(resolve => {
             resolve(this.dataMap[hubId]);
         })
+    }
+    exists(id:string):boolean {
+        if(this.dataMap[id]) return true;
+        return false;
     }
     async init(): Promise<HubCache> {
         return new Promise(async resolve => {

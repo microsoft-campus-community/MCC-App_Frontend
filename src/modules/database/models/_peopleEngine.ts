@@ -14,7 +14,6 @@ export interface _PeopleEngineUser {
 }
 
 export interface _PeopleEngineCampus {
-    aadGroupId: string;
     id: string;
     aadGroupId:string;
     name: string;
