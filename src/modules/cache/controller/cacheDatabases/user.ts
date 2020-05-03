@@ -2,10 +2,9 @@ import jwt from "jsonwebtoken";
 import { _User, _AADToken } from "../../models/user";
 import { _Campus } from "../../models/campus";
 import { _Cache } from "../../models/cacheStructure";
-import { PeopleEngine } from "../../../database/controllers/peopleEngineRequests";
 
-class UserCache implements _Cache<UserCache, _User> {
-    private dataMap: { [key: string]: _User };
+export class UserCache implements _Cache<UserCache, _User> {
+    dataMap: { [key: string]: _User };
 
     constructor() {
         this.dataMap = {};
@@ -66,6 +65,9 @@ class UserCache implements _Cache<UserCache, _User> {
         })
     }
 }
+//Need import statement here as jest otherwise tries to initialize a new user cache before parsing the class
+import { PeopleEngine } from "../../../database/controllers/peopleEngineRequests";
+
 
 export class User implements _User {
     id: string = "";
@@ -130,5 +132,3 @@ export class User implements _User {
         this.campus = campus;
     }
 }
-
-export default UserCache;

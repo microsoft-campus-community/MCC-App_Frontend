@@ -3,6 +3,7 @@ import { User } from "../controller/cacheDatabases/user";
 import config from "../../../config";
 import { PeopleEngine } from "../../database/controllers/peopleEngineRequests";
 import { Campus } from "../controller/cacheDatabases/campus";
+import { _Campus } from "../models/campus";
 
 describe("User cache", () => {
     test("User cache initializes correctly", async () => {
@@ -29,15 +30,14 @@ describe("User cache", () => {
 })
 
 describe("Campus cache", () => {
-    test("Campus cache initializes correctly", async () => {
-        let requests = Promise.all([campusCache.init(),PeopleEngine.getAllCampus()])
-        let results = await requests;
-        let campus = results[1];
-        campus.forEach(campus => {
+    test("Cache initializes", async () => {
+        let requests = await Promise.all([campusCache.init(),PeopleEngine.getAllCampus()]);
+        let allGraphCampus = requests[1];
+        allGraphCampus.forEach(campus => {
             expect(campusCache.exists(campus.id)).toBe(true);
         })
     })
-    test("Campus cache refreshs correctly", async () => {
+    test("Cache refreshs", async () => {
         await campusCache.init();
         let cacheCopy = Object.assign({},campusCache);
         await campusCache.refresh();
@@ -46,9 +46,55 @@ describe("Campus cache", () => {
             expect(campusCache.exists(key)).toBe(true);
         })
     })
-    test("Campus cache accepts new campus", async () => {
-        let campus = new Campus((await PeopleEngine.getAllCampus())[0]);
+    test("Cache accepts new campus", async () => {
+        let allGraphCampus = await PeopleEngine.getAllCampus();
+        let campus = new Campus(allGraphCampus[0]);
         await campusCache.set(campus);
         expect(await campusCache.get(campus.id)).toEqual(campus);
     });
+    test("Cache can set new campus", async () => {
+        let mockCampus = {
+            id: "123532-54245",
+            name: "Test campus",
+            leadId: "1345-5435",
+            memberIds: ["sdgsg", "32424"],
+            members: []
+        }
+        let campus = new Campus(mockCampus);
+        let operationSuccessful = await campusCache.set(campus);
+        expect(operationSuccessful).toBe(true);
+        expect(campusCache.exists(mockCampus.id)).toBe(true);
+    })
+    test("Cache retrieves all campus names", async () => {
+        let requests = await Promise.all([campusCache.init(),PeopleEngine.getAllCampus()]);
+        let allGraphCampus = requests[1];
+        let campusNames = campusCache.getCampusNameObject();
+        allGraphCampus.forEach(graphCampus => {
+            expect(
+                campusNames.some((cacheCampus) => {
+                return (cacheCampus.id === graphCampus.id && cacheCampus.name === graphCampus.name);
+            })
+            ).toBe(true);
+        })
+    })
+    test("Cache returns users campus", async () => {
+        await userCache.init();
+        await campusCache.init();
+
+        let allUserIds = Object.keys(userCache.dataMap);
+        let found = 0;
+        let notFound = 0;
+        let campusQueries:Array<Promise<Array<_Campus>>> = [];
+        allUserIds.forEach(userId => {
+            campusQueries.push(campusCache.getUserCampus(userId));
+        })
+        Promise.all(campusQueries).then(results => {
+            results.forEach(result => {
+                if(result.length > 0) found++;
+                else notFound++;
+            })
+            //The function does not require all users to have a campus, but rather 90% of all users should have a campus attached. Admin users or special occasions might not have a campus.
+            expect(found / (found + notFound)).toBeGreaterThanOrEqual(0.9);
+        })
+    })
 })
