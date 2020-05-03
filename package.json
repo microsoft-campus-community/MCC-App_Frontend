@@ -41,8 +41,20 @@
             "js"
         ],
         "collectCoverage": true,
-        "coverageReporters": ["html"],
-        "timers": "fake",
-        "testTimeout":15000
+        "coverageReporters": [
+            "html"
+        ],
+        "coverageThreshold": {
+            "global": {
+                "functions": 95,
+                "lines": 90
+            },
+            "./src/**/tests/**": {
+                "functions": 0,
+                "lines": 0
+            }
+        },
+            "timers": "fake",
+            "testTimeout": 15000
+        }
     }
-}
