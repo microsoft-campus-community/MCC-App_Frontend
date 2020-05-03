@@ -42,6 +42,7 @@
         ],
         "collectCoverage": true,
         "coverageReporters": ["html"],
-        "timers": "fake"
+        "timers": "fake",
+        "testTimeout":15000
     }
 }
