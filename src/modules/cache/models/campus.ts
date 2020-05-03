@@ -7,5 +7,6 @@ export interface _Campus {
 	memberIds:Array<string>;
 	members:Array<_User>;
 
+    init(): Promise<void>;
     isUserPartOfCampus(userId:string):Promise<_Campus|undefined>;
 }

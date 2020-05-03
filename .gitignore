@@ -2,3 +2,5 @@ dest
 node_modules
 projectManagement
 .env
+coverage
+.DS_Store

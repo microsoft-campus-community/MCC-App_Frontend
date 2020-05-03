@@ -59,7 +59,7 @@ export abstract class PeopleEngine {
     static async getCampus(campusId:string):Promise<_PeopleEngineCampus> {
         let token = await getSystemToken();
         //Hub ID is not relevant for the query (as of API specification of People Engine)
-        return this.requestEngineItem("hubs/l0l/campus/"+campusId,token);
+        return this.requestEngineItem("hubs/"+campusId+"/campus/"+campusId,token);
     }
     static async getAllCampusMembers(hubId:string, campusId:string):Promise<Array<_PeopleEngineUser>> {
         let token = await getSystemToken();

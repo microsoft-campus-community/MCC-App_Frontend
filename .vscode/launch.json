@@ -13,6 +13,6 @@
 			"outFiles": [
 				"${workspaceFolder}/dest/*.js"
 			]
-		}
+        }
 	]
 }

@@ -1,13 +1,11 @@
 import { _Campus } from "../../models/campus";
 import { _User } from "../../models/user";
 import { _Cache } from "../../models/cacheStructure";
-import { PeopleEngine } from "../../../database/controllers/peopleEngineRequests";
-import { userCache } from "../cacheObjects";
 import { _PeopleEngineCampus, _PeopleEngineUser } from "../../../database/models/_peopleEngine";
 
 
-class CampusCache implements _Cache<CampusCache, _Campus> {
-    private dataMap: { [key: string]: _Campus };
+export class CampusCache implements _Cache<CampusCache, _Campus> {
+    dataMap: { [key: string]: _Campus };
     private campusNames: Array<string>;
 
     constructor() {
@@ -99,6 +97,11 @@ class CampusCache implements _Cache<CampusCache, _Campus> {
             resolve(userCampus);
         })
     }
+    exists(campusId: string): boolean {
+        let campusIds = Object.keys(this.dataMap);
+        if (campusIds.includes(campusId)) return true;
+        return false;
+    }
     clear() {
         this.dataMap = {};
         this.campusNames = [];
@@ -109,7 +112,12 @@ class CampusCache implements _Cache<CampusCache, _Campus> {
      }
 }
 
-class Campus implements _Campus {
+//Need import statement here as jest otherwise tries to initialize a new campus cache before parsing the class
+import { PeopleEngine } from "../../../database/controllers/peopleEngineRequests";
+import { userCache } from "../cacheObjects";
+
+
+export class Campus implements _Campus {
     id: string;
     name: string;
     leadId: string;
@@ -117,23 +125,24 @@ class Campus implements _Campus {
     members: Array<_User>;
 
     constructor(campusObj: { [key: string]: any }) {
-        this.id = campusObj.id;
+        this.id = campusObj.aadGroupId || campusObj.id;
         this.name = campusObj.name;
         this.leadId = campusObj.leadId;
-        this.memberIds = campusObj.memberIds;
-        this.members = campusObj.members;
+        this.memberIds = campusObj.memberIds || [];
+        this.members = campusObj.members || [];
     }
     async init(): Promise<void> {
         return new Promise(async resolve => {
             let values = await PeopleEngine.getCampus(this.id);
             this.name = values.name;
             this.leadId = values.lead;
-            let members = await PeopleEngine.getAllCampusMembers("",this.id);
+            let members = await PeopleEngine.getAllCampusMembers(this.id,this.id);
             members.forEach(async member => {
                 this.memberIds.push(member.id);
                 let user = await userCache.get(member.id);
                 if(user) this.members.push(user);
             })
+            resolve();
         })
     }
     async isUserPartOfCampus(userId:string):Promise<_Campus|undefined> {
@@ -143,5 +152,3 @@ class Campus implements _Campus {
         })
     }
 }
-
-export default CampusCache;
