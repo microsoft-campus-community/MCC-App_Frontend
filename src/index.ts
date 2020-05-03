@@ -4,9 +4,9 @@ import session from "express-session";
 import bodyParser from "body-parser";
 
 import config from "./config";
-import { userCache, campusCache } from "./modules/cache/controller/cacheObjects";
+import { userCache, campusCache, hubCache } from "./modules/cache/controller/cacheObjects";
 import { _User } from "./modules/cache/models/user";
-import {apiRouter, authRouter} from "./modules/endpoints/controller/router";
+import { apiRouter, authRouter } from "./modules/endpoints/controller/router";
 import siteRouter from "./modules/views/router";
 
 
@@ -41,8 +41,10 @@ app.use("/", siteRouter);
 
 userCache.init().then(() => {
     campusCache.init().then(() => {
-        app.listen(process.env.PORT || 8000, () => {
-            console.info("Server is running! (Default port:8000)");
+        hubCache.init().then(() => {
+            app.listen(process.env.PORT || 8000, () => {
+                console.info("Server is running! (Default port:8000)");
+            })
         })
     })
 })
