@@ -26,3 +26,5 @@ jobs:
 
     - name: Run Jest tests
       uses: mattallty/jest-github-action@v1.0.2
+      with:
+        secrets: ${{ secrets.GITHUB_TOKEN }}
