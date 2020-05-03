@@ -29,3 +29,9 @@ jobs:
 
     - name: Run Jest tests
       run: npm test
+      env:
+        TENANT_ID: ${{ secrets.TENANT_ID }}
+        TESTUSERNAME: ${{ secrets.TESTUSERNAME }}
+        TESTUSERSECRET: ${{ secrets.TESTUSERSECRET }}
+        TESTCLIENT_ID: ${{ secrets.TESTCLIENT_ID }}
+        TESTCLIENT_SECRET: ${{ secrets.TESTCLIENT_SECRET }}
