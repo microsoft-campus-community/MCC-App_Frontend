@@ -54,7 +54,7 @@
                 "lines": 0
             }
         },
-            "timers": "fake",
-            "testTimeout": 15000
-        }
+        "timers": "fake",
+        "testTimeout": 15000
     }
+}

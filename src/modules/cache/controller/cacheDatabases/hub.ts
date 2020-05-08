@@ -31,8 +31,8 @@ export class HubCache implements _Cache<HubCache, _Hub> {
             resolve(this.dataMap[hubId]);
         })
     }
-    exists(id:string):boolean {
-        if(this.dataMap[id]) return true;
+    exists(id: string): boolean {
+        if (this.dataMap[id]) return true;
         return false;
     }
     async init(): Promise<HubCache> {
@@ -54,8 +54,11 @@ export class HubCache implements _Cache<HubCache, _Hub> {
         this.dataMap = {};
     }
     async refresh() {
-        this.clear();
-        await this.init();
+        return new Promise(async resolve => {
+            this.clear();
+            await this.init();
+            resolve();
+        })
     }
 }
 
