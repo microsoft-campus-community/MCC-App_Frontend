@@ -11,6 +11,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "applicationinsights": "^1.7.5",
         "dotenv": "^8.2.0",
         "ejs": "^3.0.1",
         "express": "^4.17.1",
@@ -54,7 +55,7 @@
                 "lines": 0
             }
         },
-            "timers": "fake",
-            "testTimeout": 15000
-        }
+        "timers": "fake",
+        "testTimeout": 15000
     }
+}

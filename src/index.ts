@@ -2,13 +2,18 @@ import express from "express";
 import path from "path";
 import session from "express-session";
 import bodyParser from "body-parser";
+import appInsights = require("applicationinsights");
 
-import config from "./config";
+import config, { executionContext } from "./config";
 import { userCache, campusCache, hubCache } from "./modules/cache/controller/cacheObjects";
 import { _User } from "./modules/cache/models/user";
 import { apiRouter, authRouter } from "./modules/endpoints/controller/router";
 import siteRouter from "./modules/views/router";
 
+if(config.executionContext === executionContext.Production)
+appInsights.setup(config.appInsightsKey)
+    .setAutoCollectConsole(true, true)
+    .start();
 
 const app = express();
 app.use(express.static(path.join(__dirname, "..", "static")));

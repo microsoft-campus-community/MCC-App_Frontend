@@ -1,5 +1,10 @@
 import dotenv from "dotenv";
 dotenv.config();
+export enum executionContext {
+    Production= "prod",
+    Development = "dev",
+    Testing = "test"
+}
 
 const config = {
 	clientId: process.env.CLIENT_ID || "",
@@ -9,7 +14,15 @@ const config = {
 	redirectUrl: process.env.REDIRECT_URL || "",
 	scope: process.env.SCOPE || "",
 	cookieSecret: process.env.COOKIESECRET || "",
-	systemUser: process.env.SYSTEMUSERID || ""
+    systemUser: process.env.SYSTEMUSERID || "",
+    appInsightsKey: process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "",
+    executionContext: process.env.EXECUTIONCONTEXT || "dev"
 }
+
+config.executionContext === "prod" ? config.executionContext = executionContext.Production :
+config.executionContext === "dev" ? config.executionContext = executionContext.Development :
+config.executionContext === "test" ? config.executionContext = executionContext.Testing :
+console.error("Execution Context is not specified! Defaulting to Development environment");
+
 
 export default config;
