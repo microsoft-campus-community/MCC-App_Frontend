@@ -72,7 +72,7 @@ apiRouter.post("/users", async (req, res) => {
                         firstName: req.body.first,
                         lastName: req.body.last,
                         secondaryMail: req.body.mail,
-                        campusId: req.body.campus || currentUser.campus
+                        campusId: req.body.campus || currentUser.campus.id
                     })
                 }
                 else {
