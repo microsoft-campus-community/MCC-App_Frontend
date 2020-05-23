@@ -19,7 +19,7 @@
         "request": "^2.88.2"
     },
     "devDependencies": {
-        "@types/ejs": "^3.0.1",
+        "@types/ejs": "^3.0.4",
         "@types/jsonwebtoken": "^8.3.8",
         "@types/passport": "^1.0.2",
         "@types/request": "^2.48.4",
