@@ -1,0 +1,20 @@
+html {
+    margin: 5% 10%;
+    padding: 0;
+    font-family: Segoe UI,SegoeUI,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    text-align: center;
+}
+img {
+    width: 15%;
+}
+h2 {
+    color: rgb(14, 120, 212);
+}
+p {
+    text-align: justify;
+}
+div {
+    margin-top: 30px;
+    text-align: left;
+}
+@page { margin: 0; }

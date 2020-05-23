@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Membership certificate - <%= user.name %></title>
+    <link rel="stylesheet" href="/styles/certificate.css">
+</head>
+
+<body>
+    <img src="/pictures/logo.png">
+    <h3>With this certificate we want to thank</h3>
+    <h2><%= user.name %></h2>
+    <h3>for their work in the Microsoft Campus Community.</h3>
+    <p>
+        The Microsoft Campus Community empowers students to advance their technical knowledge and prepare for their future career. A diverse set of members from all fields of studies collaborate to advance their technical understanding and share this knowledge with other students on their campus.
+        <br>
+        <br>
+        <%= user.name %> joined our <%= user.campus.name %> on ex.am.ples and has ever since been an integral part to fulfilling our communities goals. Through proactive learning, engagements to advance the local community and sharing in form of public events, we are happy that <%= user["Preferred name"] %> did not only have an impact on the community, but could also advance their Soft skills as well as technical knowledge significantly. We thank <%= user["Preferred name"] %> for all their efforts and hope to stay in contact so that our next wave of members can be inspired by the great career <%= user["Preferred name"] %> has ahaead of them.
+    </p>
+    <div>
+        <span id="signeeName">Tobias Urban</span><br>
+        <span id="signeeRole">German Lead, Microsoft Campus Community</span><br>
+        <span id="today"></span>
+    </div>
+
+    <script>
+        let today = new Date();
+        document.getElementById("today").innerHTML = today.getDate() + "." + today.getMonth() + "." + today.getFullYear()
+        window.print();
+    </script>
+</body>
+
+</html>

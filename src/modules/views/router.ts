@@ -104,6 +104,58 @@ siteRouter.get("/leads", async (req, res) => {
 		]
 	});
 })
+siteRouter.get("/me", async (req,res) => {
+    let user: _User | undefined = req.session ? await userCache.get(req.session.session) : undefined;
+	if (!user) {
+		res.status(403).redirect("/auth/login");
+		return;
+    }
+    res.render(site("dashboards/userDashboard"), {
+		admin: {
+			campus: campusCache.getCampusNameObject()
+		},
+		permissions: {
+			"lead": user.lead,
+			"admin": user.admin
+		},
+		user: {
+			name: user.name,
+			campus: user.campus.name,
+			projectCount: user.projectCount,
+			eventCount: user.eventCount,
+            position: user.position,
+            joinedDate: "N/A",
+		},
+
+		plannedEvents: [
+            /* {
+			name: "Awesome hack",
+			eventDate: "18.03.2020",
+			id: "123-342-gds42"
+        } */
+    ],
+		completedEvents: [],
+		plannedProjects: [
+			//{ title: "World-saving ultra awesome app that is as great as the name is long" }
+		],
+		completedProjects: [],
+		projectCount: 0,
+		eventCount: 0,
+	})
+})
+
+//TODO: Determine if user is still active (or e.g. Alumni)
+//TODO: Handle set dropout date (e.g. time of Alumnisation)
+siteRouter.get("/me/certificate", async (req,res) => {
+    let user: _User | undefined = req.session ? await userCache.get(req.session.session) : undefined;
+	if (!user) {
+		res.status(403).redirect("/auth/login");
+		return;
+    }
+    res.render(site("artifacts/memberCertificate"), {
+        user: user
+    })
+})
 
 siteRouter.get("/users/:id", async (req, res) => {
 	let userId = req.params.id;
