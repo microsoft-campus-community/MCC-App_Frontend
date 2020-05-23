@@ -145,7 +145,9 @@ siteRouter.get("/me", async (req,res) => {
 })
 
 //TODO: Determine if user is still active (or e.g. Alumni)
-//TODO: Handle set dropout date (e.g. time of Alumnisation)
+//TODO: Handle dropout date (e.g. time of Alumnisation)
+//TODO: Allow leads to add any text to certificate (e.g. under "Highlights" section)
+//TODO: Allow member to highlight certain events that should be included
 siteRouter.get("/me/certificate", async (req,res) => {
     let user: _User | undefined = req.session ? await userCache.get(req.session.session) : undefined;
 	if (!user) {
