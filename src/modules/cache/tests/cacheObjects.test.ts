@@ -1,9 +1,10 @@
-import {userCache, campusCache} from "../controller/cacheObjects";
+import { userCache, campusCache, hubCache } from "../controller/cacheObjects";
 import { User } from "../controller/cacheDatabases/user";
 import config from "../../../config";
 import { PeopleEngine } from "../../database/controllers/peopleEngineRequests";
 import { Campus } from "../controller/cacheDatabases/campus";
 import { _Campus } from "../models/campus";
+import { Hub } from "../controller/cacheDatabases/hub";
 
 describe("User cache", () => {
     test("User cache initializes correctly", async () => {
@@ -15,7 +16,7 @@ describe("User cache", () => {
     })
     test("User cache refreshs correctly", async () => {
         await userCache.init();
-        let cacheCopy = Object.assign({},userCache.dataMap);
+        let cacheCopy = Object.assign({}, userCache.dataMap);
         await userCache.refresh();
         let copyUsersIds = Object.keys(cacheCopy);
         copyUsersIds.forEach(key => {
@@ -23,7 +24,7 @@ describe("User cache", () => {
         })
     })
     test("User cache accepts new Users", async () => {
-        let user = new User(undefined,config.systemUser);
+        let user = new User(undefined, config.systemUser);
         await userCache.set(user);
         expect(await userCache.get(config.systemUser)).toEqual(user);
     });
@@ -31,7 +32,7 @@ describe("User cache", () => {
 
 describe("Campus cache", () => {
     test("Cache initializes", async () => {
-        let requests = await Promise.all([campusCache.init(),PeopleEngine.getAllCampus()]);
+        let requests = await Promise.all([campusCache.init(), PeopleEngine.getAllCampus()]);
         let allGraphCampus = requests[1];
         allGraphCampus.forEach(campus => {
             expect(campusCache.exists(campus.id)).toBe(true);
@@ -39,7 +40,7 @@ describe("Campus cache", () => {
     })
     test("Cache refreshs", async () => {
         await campusCache.init();
-        let cacheCopy = Object.assign({},campusCache);
+        let cacheCopy = Object.assign({}, campusCache);
         await campusCache.refresh();
         let copyCampusIds = Object.keys(cacheCopy.dataMap);
         copyCampusIds.forEach(key => {
@@ -66,14 +67,14 @@ describe("Campus cache", () => {
         expect(campusCache.exists(mockCampus.id)).toBe(true);
     })
     test("Cache retrieves all campus names", async () => {
-        let requests = await Promise.all([campusCache.init(),PeopleEngine.getAllCampus()]);
+        let requests = await Promise.all([campusCache.init(), PeopleEngine.getAllCampus()]);
         let allGraphCampus = requests[1];
         let campusNames = campusCache.getCampusNameObject();
         allGraphCampus.forEach(graphCampus => {
             expect(
                 campusNames.some((cacheCampus) => {
-                return (cacheCampus.id === graphCampus.id && cacheCampus.name === graphCampus.name);
-            })
+                    return (cacheCampus.id === graphCampus.id && cacheCampus.name === graphCampus.name);
+                })
             ).toBe(true);
         })
     })
@@ -84,17 +85,63 @@ describe("Campus cache", () => {
         let allUserIds = Object.keys(userCache.dataMap);
         let found = 0;
         let notFound = 0;
-        let campusQueries:Array<Promise<Array<_Campus>>> = [];
+        let campusQueries: Array<Promise<Array<_Campus>>> = [];
         allUserIds.forEach(userId => {
             campusQueries.push(campusCache.getUserCampus(userId));
         })
         Promise.all(campusQueries).then(results => {
             results.forEach(result => {
-                if(result.length > 0) found++;
+                if (result.length > 0) found++;
                 else notFound++;
             })
             //The function does not require all users to have a campus, but rather 90% of all users should have a campus attached. Admin users or special occasions might not have a campus.
             expect(found / (found + notFound)).toBeGreaterThanOrEqual(0.9);
         })
+    })
+})
+
+describe("Hub cache", () => {
+    let mockHub = {
+        id: "sdgsg",
+        name: "Test Campus",
+        lead: "0000000",
+        leadName: "Test lead",
+        aadGroupId: "sdgsg",
+        campus: [],
+        createdAt: "",
+        modifiedAt: "",
+        modifiedBy: ""
+    }
+    test("Cache initializes correctly", async () => {
+        let responses = await Promise.all([hubCache.init(), PeopleEngine.getAllHubs()])
+        let databaseHubs = responses[1];
+        databaseHubs.forEach(hub => {
+            expect(hubCache.exists(hub.aadGroupId)).toBe(true);
+        })
+    })
+    test("Cache refreshs", async () => {
+        await hubCache.init();
+        let cacheCopy = Object.assign({}, hubCache);
+        await hubCache.refresh();
+        let copyHubIds = Object.keys(cacheCopy.dataMap);
+        copyHubIds.forEach(key => {
+            expect(hubCache.exists(key)).toBe(true);
+        })
+    })
+    test("Cache accepts new hubs & proves existance", async () => {
+        hubCache.set(new Hub(mockHub));
+        expect(hubCache.exists(mockHub.aadGroupId)).toBe(true);
+        expect(hubCache.exists("SomeGibberish")).toBe(false);
+    })
+    test("Cache retrieves users", async () => {
+        hubCache.set(new Hub(mockHub));
+        let retrievedHub = await hubCache.get(mockHub.aadGroupId);
+        if (retrievedHub) {
+            expect(retrievedHub.id).toBe(mockHub.aadGroupId);
+            expect(retrievedHub.lead.id).toBe(mockHub.lead);
+            expect(retrievedHub.name).toBe(mockHub.name);
+        }
+        else fail("Hub could not be retrieved!");
+
     })
 })
