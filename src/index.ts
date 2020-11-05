@@ -1,4 +1,4 @@
-import express from "express";
+import express from 'express';
 import path from "path";
 import session from "express-session";
 import bodyParser from "body-parser";
@@ -9,6 +9,13 @@ import { _User } from "./modules/cache/models/user";
 import { apiRouter, authRouter } from "./modules/endpoints/controller/router";
 import siteRouter from "./modules/views/router";
 
+
+
+//import {Providers, MsalProvider} from '@microsoft/mgt';
+//const mgt = require('@microsoft/mgt');
+//Setup for Microsoft Graph Toolkit
+//mgt.Providers.globalProvider = new mgt.MsalProvider({ clientId: config.clientId });
+//console.dir(Providers.globalProvider);
 
 const app = express();
 app.use(express.static(path.join(__dirname, "..", "static")));

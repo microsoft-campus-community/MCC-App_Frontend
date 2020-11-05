@@ -2,8 +2,9 @@
 
 <div class="actionButtons">
 	<button class="c-button f-primary" onclick="toggleUserPopup()">Create new member account</button>
-	<button class="c-button" disabled>Create new event (coming soon)</button>
+	<button class="c-button" onclick="toggleEventPopup()">Create new event</button>
 	<button class="c-button" disabled>Create new project (coming soon)</button>
 </div>
 
 <%- include("../forms/userForm") %>
+<%- include("../forms/eventForm") %>

@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import config from "../../config";
 
 import { userCache, campusCache } from "../cache/controller/cacheObjects";
 import { _User } from "../cache/models/user";
@@ -70,6 +71,10 @@ siteRouter.get("/leads", async (req, res) => {
 		return;
     }
 	let campusMembers: Array<_User> = user.campus.members;
+	console.dir(campusCache.getCampusNameObject());
+	console.dir(user.lead);
+	console.dir(user.admin);
+	console.dir(user.campus);
 	res.render(site("dashboards/leadDashboard"), {
 		admin: {
 			campus: campusCache.getCampusNameObject()

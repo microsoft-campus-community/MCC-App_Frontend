@@ -13,20 +13,34 @@ import { postIdea } from "./api";
 export const authRouter = express.Router();
 export const apiRouter = express.Router();
 
+authRouter.get("/token", async (req, res) => {
+    const scopes = req.body.scopes || [];
+    const user: _User | undefined = req.session ? await userCache.get(req.session.session) : undefined;
+    console.log("/token");
+    console.dir(user);
+    /*let state = req.query.origin || "";
+    
+    res.redirect(getRedirectUrlToLogin(state.toString()));*/
+})
+
 authRouter.get("/login", (req, res) => {
     let state = req.query.origin || "";
-    res.redirect(getRedirectUrlToLogin(state));
+    res.redirect(getRedirectUrlToLogin(state.toString()));
 })
 
 authRouter.get(config.redirectUrl, async (req, res) => {
     const authCode = req.query.code;
-    let userId = await completeLogin(authCode);
+    if(!authCode){
+        res.status(500).send("Your login could not be successfully completed. Please contact the app developers for support!");
+        return;
+    }
+    let userId = await completeLogin(authCode.toString());
     if (userId === "") {
         res.status(500).send("Your login could not be successfully completed. Please contact the app developers for support!");
     }
     else {
         if (req.session) req.session.session = userId;
-        req.query.state ? res.redirect(req.query.state) : res.redirect("/");
+        req.query.state ? res.redirect(req.query.state.toString()) : res.redirect("/");
     }
 })
 
@@ -86,4 +100,44 @@ apiRouter.post("/users", async (req, res) => {
             }
         })
     }
+})
+
+
+apiRouter.post("/events", async (req, res) => {
+    console.dir(req.body);
+    console.dir(req.headers.accept);
+    /*if (!req.body.first || !req.body.last || !req.body.mail) {
+        res.status(400).send("Required parameters missing! Provide: first,last,mail");
+        return;
+    }
+    else {
+        await new Promise(async resolve => {
+            let currentUser: _User | undefined;
+            if (req.session) {
+                currentUser = await userCache.get(req.session.session);
+            }
+            else {
+                res.status(403).send("User is not signed in!");
+                return;
+            }
+            if (currentUser && currentUser.token) {
+                if (currentUser.campus || req.body.campus) {
+                    PeopleEngine.createUser(currentUser.token, {
+                        firstName: req.body.first,
+                        lastName: req.body.last,
+                        secondaryMail: req.body.mail,
+                        campusId: req.body.campus || currentUser.campus.id
+                    })
+                }
+                else {
+                    res.status(400).send("Could not find campus for user to be created in!");
+                    return;
+                }
+            }
+            else {
+                res.status(403).send("User is not signed in!");
+                return;
+            }
+        })
+    }*/
 })

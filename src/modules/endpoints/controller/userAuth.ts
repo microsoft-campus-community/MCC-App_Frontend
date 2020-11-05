@@ -15,6 +15,7 @@ export function getRedirectUrlToLogin(state?:string):string {
     "&scope=" + config.scope
 }
 
+
 /**
  *
  * @param authCode
