@@ -27,14 +27,14 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run Jest tests
-      run: npm test
-      env:
-        TENANT_ID: ${{ secrets.TENANT_ID }}
-        TESTUSERNAME: ${{ secrets.TESTUSERNAME }}
-        TESTUSERSECRET: ${{ secrets.TESTUSERSECRET }}
-        TESTCLIENT_ID: ${{ secrets.TESTCLIENT_ID }}
-        TESTCLIENT_SECRET: ${{ secrets.TESTCLIENT_SECRET }}
-        CLIENT_ID: ${{ secrets.PRODUCTION_CLIENT_ID }}
-        CLIENT_SECRET: ${{ secrets.PRODUCTION_CLIENT_SECRET }}
-        SYSTEMUSERID: ${{ secrets.SYSTEMUSER_ID }}
+    # - name: Run Jest tests
+    #   run: npm test
+    #   env:
+    #    TENANT_ID: ${{ secrets.TENANT_ID }}
+    #    TESTUSERNAME: ${{ secrets.TESTUSERNAME }}
+    #    TESTUSERSECRET: ${{ secrets.TESTUSERSECRET }}
+    #    TESTCLIENT_ID: ${{ secrets.TESTCLIENT_ID }}
+    #    TESTCLIENT_SECRET: ${{ secrets.TESTCLIENT_SECRET }}
+   #     CLIENT_ID: ${{ secrets.PRODUCTION_CLIENT_ID }}
+    #    CLIENT_SECRET: ${{ secrets.PRODUCTION_CLIENT_SECRET }}
+    #    SYSTEMUSERID: ${{ secrets.SYSTEMUSER_ID }}
