@@ -84,7 +84,8 @@
             }
 
             if (firstName && lastName && mail) {
-                loadUi();
+                
+                changeUItoLoad();
                 let body = {
                     first: firstName,
                     last: lastName,
@@ -99,7 +100,7 @@
                     body: JSON.stringify(body)
                 }).then(response => {
                     if (response.status != 201) console.error("Uh oh!");
-                    else resetUi();
+                    else changeUItoFinish();
                 })
             }
         }
@@ -114,7 +115,7 @@
             labels[2].innerText = "Alternative mail address";
             labels[2].style.color = "black";
         }
-        function loadUi() {
+        function changeUItoLoad() {
             resetLabels();
 
             let inputs = document.getElementById("userPopup").getElementsByTagName("input");
@@ -139,7 +140,7 @@
 			</div>
 			`;
         }
-        function resetUi() {
+        function changeUItoFinish() {
             let btns = document.getElementById("userPopup").getElementsByClassName("actionButtons")[0].children;
             let createBtn = btns[0];
             let cancelBtn = btns[1];

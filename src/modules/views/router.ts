@@ -61,7 +61,7 @@ siteRouter.get("/leads", async (req, res) => {
 		res.status(403).send();
 		return;
     }
-    if(!user.lead) {
+    if(!user.lead && !user.admin) {
         res.status(403).send("This page is unfortunately only available for leads. Please head back to <a href='/'>the homepage</a>.");
         return;
     }

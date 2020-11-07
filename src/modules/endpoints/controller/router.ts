@@ -82,12 +82,13 @@ apiRouter.post("/users", async (req, res) => {
             }
             if (currentUser && currentUser.token) {
                 if (currentUser.campus || req.body.campus) {
-                    PeopleEngine.createUser(currentUser.token, {
+                    await PeopleEngine.createUser(currentUser.token, {
                         firstName: req.body.first,
                         lastName: req.body.last,
                         secondaryMail: req.body.mail,
                         campusId: req.body.campus || currentUser.campus.id
                     })
+                    res.status(201).send();
                 }
                 else {
                     res.status(400).send("Could not find campus for user to be created in!");

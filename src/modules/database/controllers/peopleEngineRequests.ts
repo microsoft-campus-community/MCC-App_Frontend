@@ -1,6 +1,6 @@
 import request, { UrlOptions, CoreOptions } from "request";
 import { getSystemToken } from "../../endpoints/controller/systemAuth";
-import { _PeopleEngineUser, _PeopleEngineCampus, _PeopleEngineHub } from "../models/_peopleEngine";
+import { _PeopleEngineUser, _PeopleEngineCampus } from "../models/_peopleEngine";
 import { userCache } from "../../cache/controller/cacheObjects";
 import { User } from "../../cache/controller/cacheDatabases/user";
 
@@ -8,7 +8,7 @@ import { User } from "../../cache/controller/cacheDatabases/user";
 
 export abstract class PeopleEngine {
     //TODO Define dev and production endpoint
-    private static baseUrl:string = "https://commasto-api-dev.azurewebsites.net/api/";
+    private static baseUrl:string = "https://commasto-people-engine.azurewebsites.net/api/";
 
         static async getAllUsers():Promise<Array<_PeopleEngineUser>> {
             let token = await getSystemToken();
@@ -30,16 +30,16 @@ export abstract class PeopleEngine {
         })
     }
     static async getCurrentUser(token:string):Promise<_PeopleEngineUser|undefined> {
-        return this.requestEngineItem("users/current?scope=full",token);
+        return this.requestEngineItem("/me",token);
     }
     static async getCurrentUserCampus(token:string):Promise<_PeopleEngineCampus> {
-        return this.requestEngineItem("hubs/campus/my",token);
+        return this.requestEngineItem("me/campus",token);
     }
-    static async getCurrentUserHub(token:string):Promise<_PeopleEngineHub> {
+    /* static async getCurrentUserHub(token:string):Promise<_PeopleEngineHub> {
         return this.requestEngineItem("hubs/my",token);
-    }
+    } */
 
-    static async getAllHubs():Promise<Array<_PeopleEngineHub>> {
+/*     static async getAllHubs():Promise<Array<_PeopleEngineHub>> {
         let token = await getSystemToken();
         return this.requestEngineArray("hubs",token);
     }
@@ -50,20 +50,20 @@ export abstract class PeopleEngine {
     static async getAllCampusInHub(hubId:string):Promise<Array<_PeopleEngineCampus>> {
         let token = await getSystemToken();
         return this.requestEngineArray("hubs/"+hubId+"/campus",token);
-    }
+    } */
 
     static async getAllCampus():Promise<Array<_PeopleEngineCampus>> {
         let token = await getSystemToken();
-        return this.requestEngineArray("hubs/campus",token);
+        return this.requestEngineArray("campus",token);
     }
     static async getCampus(campusId:string):Promise<_PeopleEngineCampus> {
         let token = await getSystemToken();
         //Hub ID is not relevant for the query (as of API specification of People Engine)
-        return this.requestEngineItem("hubs/"+campusId+"/campus/"+campusId,token);
+        return this.requestEngineItem("/campus/"+campusId,token);
     }
-    static async getAllCampusMembers(hubId:string, campusId:string):Promise<Array<_PeopleEngineUser>> {
+    static async getAllCampusMembers(campusId:string):Promise<Array<_PeopleEngineUser>> {
         let token = await getSystemToken();
-        return this.requestEngineArray("hubs/"+hubId+"/campus/"+campusId+"/users",token);
+        return this.requestEngineArray("/campus/"+campusId+"/users",token);
     }
 
     //Utility functions

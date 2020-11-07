@@ -1,11 +1,11 @@
 export interface _PeopleEngineUser {
     isCampusLead: boolean;
-    isHubLead: boolean;
+    /* isHubLead: boolean; */
     isAdmin: boolean;
     accountEnabled: boolean;
     city: string;
-    hireDate: string;
-    university: string;
+    /* hireDate: string; */
+    /* university: string; */
     displayName: string;
     id: string;
     jobTitle: string;
@@ -15,18 +15,10 @@ export interface _PeopleEngineUser {
 
 export interface _PeopleEngineCampus {
     id: string;
-    aadGroupId:string;
-    name: string;
-    hubId: string;
-    hubName: string;
-    campusLocation: string;
-    university: string;
-    lead: string;
-    createdAt: string;
-    modifiedAt: string;
-    modifiedBy: string;
+    displayName: string;
+    ext5xtebhdf_mccGroupSettings: {leadId:string};
 }
-
+/* 
 export interface _PeopleEngineHub {
     name: string;
     lead: string;
@@ -37,4 +29,4 @@ export interface _PeopleEngineHub {
     createdAt: string;
     modifiedAt: string;
     modifiedBy: string;
-}
+} */

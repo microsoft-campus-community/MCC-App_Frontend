@@ -46,7 +46,7 @@ export class CampusCache implements _Cache<CampusCache, _Campus> {
             let memberQueries:Array<Promise<Array<_PeopleEngineUser>>> = [];
 
             for(let i = 0; i < allDatabaseCampus.length; i++) {
-                memberQueries.push(PeopleEngine.getAllCampusMembers(allDatabaseCampus[i].hubId, allDatabaseCampus[i].id))
+                memberQueries.push(PeopleEngine.getAllCampusMembers(allDatabaseCampus[i].id))
             }
 
 
@@ -55,13 +55,13 @@ export class CampusCache implements _Cache<CampusCache, _Campus> {
             for(let i = 0; i < allDatabaseCampus.length; i++) {
                 let systemCampusObj:any = {
                     id: allDatabaseCampus[i].id,
-                    name: allDatabaseCampus[i].name,
-                    leadId: allDatabaseCampus[i].lead,
+                    name: allDatabaseCampus[i].displayName,
                     memberIds: [],
                     members: [],
                     eventIds: []
                 }
-                this.campusNames.push(allDatabaseCampus[i].name);
+                if(allDatabaseCampus[i].ext5xtebhdf_mccGroupSettings) systemCampusObj.leadId = allDatabaseCampus[i].ext5xtebhdf_mccGroupSettings.leadId;
+                this.campusNames.push(allDatabaseCampus[i].displayName);
                 let members = campusMemberMap[i];
                 let userArr:Array<_User> = [];
                 for (let j = 0; j < members.length; j++) {
@@ -134,9 +134,9 @@ export class Campus implements _Campus {
     async init(): Promise<void> {
         return new Promise(async resolve => {
             let values = await PeopleEngine.getCampus(this.id);
-            this.name = values.name;
-            this.leadId = values.lead;
-            let members = await PeopleEngine.getAllCampusMembers(this.id,this.id);
+            this.name = values.displayName;
+            this.leadId = values.ext5xtebhdf_mccGroupSettings.leadId;
+            let members = await PeopleEngine.getAllCampusMembers(this.id);
             members.forEach(async member => {
                 this.memberIds.push(member.id);
                 let user = await userCache.get(member.id);
