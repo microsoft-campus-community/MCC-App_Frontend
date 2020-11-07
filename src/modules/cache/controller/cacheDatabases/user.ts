@@ -117,7 +117,7 @@ export class User implements _User {
         if (object.id) this.id = object.id;
         if (object.jobTitle) this.position = object.jobTitle;
         if (object.isAdmin) this.admin = true;
-        if (object.isCampusLead || object.isHubLead) this.lead = true;
+        if (object.isLead) this.lead = true;
     }
     storeToken(jwtToken: string): void {
         let tokenInfo = jwt.decode(jwtToken);
