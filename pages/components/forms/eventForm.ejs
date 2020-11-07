@@ -1,0 +1,294 @@
+<div id="eventPopup" class="popup">
+    <div style="overflow-y: auto; overflow-x: hidden; padding-top: 0;" class="content">
+        <div
+            style="padding: 0; padding-top: 20px; padding-bottom: 20px; background-color: white; width: 100%; position: sticky; top: 0; z-index: 5;">
+            <h2>Create a new event</h2>
+        </div>
+
+        <!-- TODO <script src="https://unpkg.com/@microsoft/mgt/dist/bundle/mgt-loader.js"></script>-->
+        <!--<mgt-msal-provider client-id="[CLIENT-ID]"></mgt-msal-provider>
+<mgt-login></mgt-login>
+
+
+        <mgt-people-picker></mgt-people-picker>-->
+        <div class="inputs">
+            <label id="event-titel-label" class="c-label" for="event-titel">Titel</label>
+            <input class="c-text-field" type="text" id="event-titel" name="event-titel">
+
+            <label id="event-short-description-label" class="c-label" for="event-short-description">Short
+                Description</label>
+            <input class="c-text-field" type="text" id="event-short-description" name="event-short-description">
+            <div class="c-textarea">
+                <label id="event-description-label" class="c-label" for="event-description">Description</label>
+                <!--<input class="c-text-field" type="text" name="default">-->
+                <textarea id="event-description" name="event-description"></textarea>
+            </div>
+            <div class="g-row">
+                <div>
+                    <label id="event-start-label" class="c-label" for="event-start">Start (date and time)</label>
+                    <input class="c-date-time-picker" id="event-start" name="event-start" type="datetime-local">
+                </div>
+                <div>
+                    <label id="event-end-label" class="c-label" for="event-end">End (date and time)</label>
+                    <input class="c-date-time-picker" id="event-end" name="event-end" type="datetime-local">
+                </div>
+            </div>
+            <div class="c-select f-border">
+                <label class="c-label" for="event-sensitivity">Sensitivity</label>
+                <select style="display: block;" name="event-sensitivity" id="event-sensitivity">
+                    <option value="public">Public</option>
+                    <option value="internal">Internal</option>
+
+                </select>
+            </div>
+            <div class="c-select f-border">
+                <label class="c-label" for="event-campus">Campus</label>
+                <select style="display: block;" name="event-campus" id="event-campus">
+                    <option value="Germany-wide">Germany-wide</option>
+                    <%
+                    if(permissions.admin){
+                        if(admin) { 
+                            for(let i = 0; i < admin.campus.length; i++) {%>
+                    <option value="<% admin.campus[i].name %>" class="">
+                        <%= admin.campus[i].name %>|<%= admin.campus[i].id %></option>
+                    <% }    
+                        }
+                    } else {
+                        if(user.Campus){%>
+                    <option value="<%= user.Campus.name %>" class=""><%= user.Campus.name %></option>
+                    <% }
+                    } %>
+
+                </select>
+            </div>
+
+            <!-- <div class="c-file">
+                <label class="c-label" for="event-image-upload">Hero image</label>
+                <input name="event-image-upload" id="event-image-upload" type="file" accept="image/*">
+
+            </div>-->
+            <div>
+                <label id="event-image-upload-label" class="c-label" for="event-image-upload">Hero image</label>
+                <input name="event-image-upload" id="event-image-upload" type="file" accept="image/*">
+
+            </div>
+
+
+        </div>
+
+        <div class="actionButtons">
+            <button class="c-button f-primary" onclick="createEventFromPopup()">Create event</button>
+            <button class="c-button" onclick="toggleEventPopup()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+
+        // alternatively, you can set the provider in code and provide more options
+        /*
+        TODO
+         const provider = new mgt.SimpleProvider((scopes) => {
+             // return a promise with accessToken
+             console.log("get token");
+             console.dir(scopes);
+         })
+         provider.setState(mgt.ProviderState.SignedIn);
+         mgt.Providers.globalProvider = provider;
+         console.dir(mgt.Providers.globalProvider);
+         */
+        function toggleEventPopup() {
+
+            let popup = document.getElementById("eventPopup");
+            if (popup.style.display === "none" || popup.style.display === "") popup.style.display = "block";
+            else {
+                let inputs = document.getElementById("eventPopup").getElementsByTagName("input");
+
+                for (let i = 0; i < inputs.length; i++) {
+                    inputs[i].disabled = false;
+                    inputs[i].value = "";
+                }
+
+                let btns = document.getElementById("eventPopup").getElementsByClassName("actionButtons")[0].children;
+                let createBtn = btns[0];
+                let cancelBtn = btns[1];
+
+                createBtn.disabled = false;
+                cancelBtn.disabled = false;
+
+                createBtn.innerHTML = "Create event";
+                cancelBtn.innerHTML = "Cancel";
+
+                popup.style.display = "none";
+            }
+
+        }
+
+        function createEventFromPopup() {
+            resetLabels();
+
+            const titel = document.getElementById("event-titel").value;
+            const shortDescription = document.getElementById("event-short-description").value;
+            const description = document.getElementById("event-description").value;
+            const start = document.getElementById("event-start").value;
+            const end = document.getElementById("event-end").value;
+            const sensitivity = document.getElementById("event-sensitivity").value;
+            const campus = document.getElementById("event-campus").value;
+            const heroImage = document.getElementById("event-image-upload").value;
+
+            let validationError = false;
+
+            if (!titel || !titel.trim()) {
+                const titelLabel = document.getElementById("event-titel-label");
+                titelLabel.innerText = "Titel (missing)";
+                titelLabel.style.color = "red";
+                validationError = true;
+            }
+            if (!shortDescription || !shortDescription.trim()) {
+                const shortDescriptionLabel = document.getElementById("event-short-description-label");
+                shortDescriptionLabel.innerText = "Short Description (missing)";
+                shortDescriptionLabel.style.color = "red";
+                validationError = true;
+
+            }
+            if (!description || !description.trim()) {
+                const descriptionLabel = document.getElementById("event-description-label");
+                descriptionLabel.innerText = "Description (missing)";
+                descriptionLabel.style.color = "red";
+                validationError = true;
+
+            }
+            if (!start) {
+                const startLabel = document.getElementById("event-start-label");
+                startLabel.innerText = "Start (date and time) (missing)";
+                startLabel.style.color = "red";
+                validationError = true;
+
+            }
+            if (!end) {
+                const endLabel = document.getElementById("event-end-label");
+                endLabel.innerText = "End (date and time) (missing)";
+                endLabel.style.color = "red";
+                validationError = true;
+
+            }
+            if (!heroImage) {
+                const heroImageLabel = document.getElementById("event-image-upload-label");
+                heroImageLabel.innerText = "Hero image (missing)";
+                heroImageLabel.style.color = "red";
+                validationError = true;
+
+            }
+            if (start && end && start >= end) {
+                const startLabel = document.getElementById("event-start-label");
+                startLabel.innerText = "Start (date and time) (must be before end)";
+                startLabel.style.color = "red";
+                const endLabel = document.getElementById("event-end-label");
+                endLabel.innerText = "End (date and time) (must be after start)";
+                endLabel.style.color = "red";
+                validationError = true;
+
+            }
+
+            if (validationError) {
+                return;
+            }
+
+            loadUi();
+
+            const formData = new FormData();
+            formData.append("titel", titel);
+            formData.append("shortDescription", shortDescription);
+            formData.append("description", description);
+            formData.append("start", start);
+            formData.append("end", end);
+            formData.append("sensitivity", sensitivity);
+            formData.append("campus", campus);
+            formData.append("heroImage", heroImage);
+
+
+
+            fetch("api/events", {
+                method: "POST",
+                body: formData
+            }).then(response => {
+                if (response.status != 201) console.error("Uh oh!");
+                else resetUi();
+            });
+
+
+            /*if (firstName && lastName && mail) {
+                loadUi();
+                let body = {
+                    first: firstName,
+                    last: lastName,
+                    mail: mail
+                }
+                if (campus != "") body.campus = campus;
+                fetch("/api/users", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(body)
+                }).then(response => {
+                    if (response.status != 201) console.error("Uh oh!");
+                    else resetUi();
+                })
+            }*/
+        }
+
+        function resetLabels() {
+            const labels = document.getElementById("eventPopup").getElementsByTagName("label");
+            labels[0].innerText = "Titel";
+            labels[0].style.color = "black";
+            labels[1].innerText = "Short Description";
+            labels[1].style.color = "black";
+            labels[2].innerText = "Description";
+            labels[2].style.color = "black";
+            labels[3].innerText = "Start (date and time)";
+            labels[3].style.color = "black";
+            labels[4].innerText = "End (date and time)";
+            labels[4].style.color = "black";
+            labels[5].innerText = "Sensitivity";
+            labels[5].style.color = "black";
+            labels[6].innerText = "Campus";
+            labels[6].style.color = "black";
+            labels[7].innerText = "Hero image";
+            labels[7].style.color = "black";
+        }
+        function loadUi() {
+            resetLabels();
+
+            let inputs = document.getElementById("eventPopup").getElementsByTagName("input");
+
+            for (let i = 0; i < inputs.length; i++) {
+                inputs[i].disabled = true;
+            }
+
+            let btns = document.getElementById("eventPopup").getElementsByClassName("actionButtons")[0].children;
+            let createBtn = btns[0];
+            let cancelBtn = btns[1];
+
+            createBtn.disabled = true;
+            cancelBtn.disabled = true;
+            createBtn.innerHTML = `
+			<div class="c-progress f-indeterminate-regional" role="progressbar" aria-valuetext="Loading..." tabindex="0" aria-label="indeterminate regional progress bar">
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+			`;
+        }
+        function resetUi() {
+            let btns = document.getElementById("eventPopup").getElementsByClassName("actionButtons")[0].children;
+            let createBtn = btns[0];
+            let cancelBtn = btns[1];
+            createBtn.innerHTML = "Done!";
+            cancelBtn.innerHTML = "Close";
+            cancelBtn.disabled = false;
+        }
+    </script>
+
+</div>

@@ -1,15 +1,21 @@
-import express from "express";
+import express from 'express';
 import path from "path";
 import session from "express-session";
 import bodyParser from "body-parser";
 
 import config from "./config";
-import loginApi from "./controller/auth/authApi";
-import { userCache } from "./controller/cache/cache";
-import { _User } from "./models/database/user";
-import apiRouter from "./controller/api/router";
-import siteRouter from "./views/router";
+import { userCache, campusCache } from "./modules/cache/controller/cacheObjects";
+import { _User } from "./modules/cache/models/user";
+import { apiRouter, authRouter } from "./modules/endpoints/controller/router";
+import siteRouter from "./modules/views/router";
 
+
+
+//import {Providers, MsalProvider} from '@microsoft/mgt';
+//const mgt = require('@microsoft/mgt');
+//Setup for Microsoft Graph Toolkit
+//mgt.Providers.globalProvider = new mgt.MsalProvider({ clientId: config.clientId });
+//console.dir(Providers.globalProvider);
 
 const app = express();
 app.use(express.static(path.join(__dirname, "..", "static")));
@@ -21,7 +27,7 @@ app.use(session({
     saveUninitialized: true
 }));
 
-app.use("/auth", loginApi);
+app.use("/auth", authRouter);
 
 app.use(async (req, res, next) => {
     if (req.session && req.session.session) {
@@ -40,7 +46,13 @@ app.use("/api", apiRouter);
 
 app.use("/", siteRouter);
 
-
-app.listen(process.env.PORT || 8000, () => {
-    console.info("Server is running! (Default port:8000)");
+userCache.init().then(() => {
+    campusCache.init().then(() => {
+        // hubCache.init().then(() => {
+            app.listen(process.env.PORT || 8000, () => {
+                console.info("Server is running! (Default port:8000)");
+            })
+        // })
+    })
 })
+
