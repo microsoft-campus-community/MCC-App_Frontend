@@ -2,18 +2,24 @@
 	<summary>
 		<div class="summaryDescription">
 			<div class="title">Campus members</div>
+			<% if(members) { %>
 			<div class="badge"><%= members.length %></div>
+			<% } else { %>
+				<div class="badge">Not available</div>
+			<% } %>
 		</div>
 	</summary>
 
-	<% for(let i = 0; i < members.length; i++) { %>
-	<div class="action-row">
-		<div class="btn">
-			<a href="/users/<%= members[i].id %>">View</a>
+	<% if(members) { %>
+		<% for(let i = 0; i < members.length; i++) { %>
+		<div class="action-row">
+			<div class="btn">
+				<a href="/users/<%= members[i].id %>">View</a>
+			</div>
+			<div class="title">
+				<%= members[i].name %>
+			</div>
 		</div>
-		<div class="title">
-			<%= members[i].name %>
-		</div>
-	</div>
-<% } %>
+		<% } %>
+	<% } %>
 </details>

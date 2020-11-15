@@ -1,6 +1,6 @@
 <%- include("../../shell/shellStart") %>
 
-
+<% if(user) { %>
 <h2 class="userName"><%= user.name %></h2>
 
 
@@ -28,4 +28,9 @@
 <%- include("../../components/lists/plannedEvents") %>
 <%- include("../../components/lists/completedEvents") %>
 
+<% } else { %>
+
+	<h2>Sorry, we couldn't find the specified user! Try reloading the page, and leave a feedback through Teams!</h2>
+
+<% } %>
 <%- include("../../shell/shellEnd") %>
