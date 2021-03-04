@@ -28,7 +28,7 @@
         "@types/passport": "^1.0.2",
         "@types/request": "^2.48.4",
         "jest": "^25.5.2",
-        "ts-jest": "^25.4.0",
+        "ts-jest": "^26.5.3",
         "typescript": "^3.8.3"
     },
     "jest": {
